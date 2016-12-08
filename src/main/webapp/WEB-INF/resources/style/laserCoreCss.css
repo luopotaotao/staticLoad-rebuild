@@ -1,0 +1,163 @@
+body {background:#e6e5ea;font-size: 13px; padding: 0px; margin: 0px; font-family: "寰蒋闆呴粦", "Microsoft Yahei", "STXihei", arial, sans-serif;color:#666;}
+input,button { font-family: "寰蒋闆呴粦", "Microsoft Yahei", "STXihei", arial, sans-serif;}
+.loginbox{box-shadow: 0px 10px 150px #666666;
+		  -webkit-box-shadow: 0px 10px 150px #666666;/*safari鎴朿hrome*/
+		  -moz-box-shadow: 0px 10px 150px #666666;/*firefox*/
+		border-radius:30px; 
+		height:384px;
+		width:383px; 
+	    background-image:url(images/loginbg.png); 
+	    position:absolute;top:50%;left:50%;margin-top:-240px;margin-left:-192px;}
+a{text-decoration:none;color:#69c;}
+a:hover{color:#f90;}
+
+.title{width:100%;height:70px; padding-top:34px; border-top-left-radius: 3px;border-top-right-radius: 3px;}
+.title .logo{text-align: center;font-size: 30px;width: 100%;
+	-webkit-box-reflect: below -10px -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(255, 255, 255, 0.3)));
+}
+.title .logo b{color:#99ccff;font-weight: 400;}
+.title .info{text-align: right;font-size: 12px;color:#99ccff;padding-right: 13px;padding-top: 15px;}	
+
+.w80{width: 80px;}
+.inputs{padding:50px;padding-bottom:0px;}
+.inputs div{margin-bottom: 15px; }
+.inputs div span{display: block;float: left;width:60px;line-height:30px;height:30px; } 
+.inputs div input{height: 25px;width: 190px;}
+.inputs div img{margin-left:5px ;margin-top:-8px; padding:0px;}
+
+.inputs .check_code{margin-bottom: 0;}
+.inputs .check_code input{width:110px;display: block;float: left;}
+.inputs .check_code img{display: block;float: left;padding-left: 10px;width: 70px;height: 32px;}	
+
+input,input:focus {outline: none; box-shadow: none; border: 1px solid #bbb;padding:3px 5px;}
+input:focus {border-color: #75A1F0; outline: none; box-shadow: 0 0 12px #75A1F0; 
+	-webkit-transition: all 0.218s; -moz-transition: all 0.218s; -o-transition: all 0.218s; -ms-transition: all 0.218s; transition: all 0.218s;}
+
+.actions{padding-left:90px;}
+.checkbox{border:none;padding-right: 10px;}
+
+.msg{color: #f96;text-align: center;margin-bottom: -10px;padding-top: 10px;}
+.footer{color: #999;position: absolute;bottom: 15px;text-align: center;width: 100%;}
+
+<!-- -->
+
+.tableForm {
+	border-collapse: collapse;
+	width:93%;
+	margin:10px;
+}
+
+.tableForm th {
+	text-align: right;
+	border-bottom: 1px dotted #ccc;
+	padding: 3px;
+	/* add by kiky 2015-6-29 21:15:21 解决diolog中文本超长时候，table变形的问题 */ 
+	table-layout:fixed;
+}
+
+.tableForm td {
+	text-align: left;
+	vertical-align:middle;
+	border-bottom: 1px dotted #ccc;
+	padding: 5px 0px 0px 0px ;
+	/* add by kiky 2015-6-29 21:15:21 解决diolog中文本超长时候，table变形的问题 */
+	word-break:break-all;
+}
+
+.tableForm td.tdlabel{
+	padding: 5px;
+}
+
+.inputwidth{
+	margin-top:3px;
+	width:140px;
+}
+.tableForm textarea{
+	resize:none;
+	background-color:#fff;
+	
+}
+
+/* 閲嶆柊瀹氫箟easyui diolag鐨勬牱寮�浣垮叾鎸夐挳灞呬腑 2015-05-04 12:41:16 by kiky */
+.dialog-button {
+  padding: 5px;
+  text-align: center;
+}
+
+/* 鍘绘帀easyui涓枃鏈楠岃瘉鐨勫皬涓夎绗﹀彿 by kiky 2015-05-08 14:41:10 */
+.validatebox-invalid
+{ 
+  background-image:none;
+  background-color:#fff;
+  border:1px solid #ccc;
+  	
+}
+
+/* 澶勭悊tree鐨勯珮搴﹂棶棰�by kiky 2015-05-15 18:15:14 */
+.tree-node
+{
+	height:22px;
+	padding-top:5px   
+}
+/*-----------------------------------------------------------------------------*/
+
+textarea, input[type="text"], input[type="password"],.uneditable-input {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+}
+select, textarea, input[type="text"], input[type="password"],.uneditable-input
+{
+    border-radius: 4px;
+    color: #555;
+    display: inline-block;
+    font-size: 12px;
+    height: 18px;
+    line-height: 20px;
+    margin-bottom: 5px;
+    vertical-align: middle;
+    width: 206px;
+    font-weight: normal;
+}
+select{width:218px;}
+
+
+/*******************************************************************************************/
+html,body{overflow:hidden;}
+body
+{
+	margin: 0px;
+	overflow:hidden;
+	background-color:#2696cb;
+
+}
+.topul{
+	list-style-type: none;
+	margin:0;
+	padding:0;
+	margin-top: 20px;
+	/*padding-top:3px;*/
+	padding-bottom:8px;
+	font-size: 13px;
+}
+
+.topul li
+{
+	display:inline;
+}
+.topul li a
+{
+	color: white;
+	text-align:center;
+	text-decoration:none;
+	padding:8px 14px 8px 10px;
+}
+.topul li a #img
+{
+	vertical-align: middle;
+}
+.topul li a.onnav {
+	/*background: url('/public/images/newweb_06.png') no-repeat;*/
+}
+/***************************************************************************************/

@@ -1,0 +1,164 @@
+body {
+	margin: 0;
+    padding-top:80px;
+    font-size: 16px;
+    color: #666666;
+    font-family: "微软雅黑";
+    background:#dfdfdf;
+}
+* {
+	font-family:'微软雅黑';
+}
+ul, li {
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+a {
+	text-decoration:none;
+}
+/*bg*/
+.Main
+{
+    width: 1000px;
+    height:400px;
+    margin-left:auto;
+    margin-right:auto;
+    background:url(images/login/pic_1.png) no-repeat;
+}
+.login_box
+{
+    float:right;
+    margin-top:70px;
+    margin-right:50px;
+}
+
+.bg_pic {
+	width:1000px;
+	background-image:url(images/bg_pic.png);
+	background-repeat:no-repeat;
+	height:550px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:25px;
+	border:1px solid #FFF
+}
+/*login_box*/
+.login_box_u {
+	background-image:url(images/login_box_u.png);
+	background-repeat:no-repeat;
+	background-position: center;
+	width:400px;
+	height:72px;
+	margin:auto;
+	margin-top:100px;
+	text-align:center;
+}
+.login_box_u .logo {
+	float:left;
+	margin-left:40px;
+	padding-top:20px;
+}
+.login_box_u .title {
+	float:left;
+	margin-left:10px;
+	padding-top:30px;
+}
+.login_box_c {
+	background-image:url(images/login_box_c.png);
+	background-repeat:repeat-y;
+	width:400px;
+	background-position: center;
+	margin:0px auto;
+	height:190px;
+}
+.input_box {
+	padding-left:30px;
+	padding-top:10px;
+	
+}
+.input_box li {
+	margin-bottom:5px;
+	htight:30px;
+	line-height:30px;
+}
+
+.login_btn {
+	position:relative;
+	background-image:url(images/login_box_c.png);
+	background-repeat:repeat-y;
+	height:46px;
+}
+/*.btn_login_1 {
+	width:273px;
+	height:36px;
+	background-image:url(./images/btn_login_1.png);
+	background-repeat:no-repeat;
+	background-color:transparent;
+	position:absolute;
+	left:93px;
+	top:0px;
+	z-index:3;
+}*/
+
+.login_box_d {
+	background-image:url(images/login_box_d.png);
+	background-repeat:no-repeat;
+	height:15px;
+	width:400px;
+	margin:auto;
+}
+
+
+
+/* Button Style */
+.submit {
+	margin-left:50px;
+    background-color: #cec4c4;
+    background: -webkit-gradient(linear, left top, left bottom, from(#cec4c4), to(#9b9494));
+    background: -webkit-linear-gradient(top,  #cec4c4, #9b9494);
+    background: -moz-linear-gradient(top,  #cec4c4, #9b9494);
+    background: -ms-linear-gradient(top,  #cec4c4, #9b9494);
+    background: -o-linear-gradient(top, #cec4c4, #9b9494);
+    background: linear-gradient(top,  #cec4c4, #9b9494);
+    border: 1px solid #b3b3b3;
+    border-bottom: 1px solid #b3b3b3;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    box-shadow: inset 0 1px 0 0 #f1f1f1;
+    -webkit-box-shadow: 0 1px 0 0 #f1f1f1 inset ;
+    -moz-box-shadow: 0 1px 0 0 #f1f1f1 inset;
+    -ms-box-shadow: 0 1px 0 0 #f1f1f1 inset;
+    -o-box-shadow: 0 1px 0 0 #f1f1f1 inset;
+    color: #000;
+    font-weight: bold;
+	width:240px; height:30px; 
+	font-size:14px;
+	align:center;
+    text-align: center;
+    text-shadow: 0 -1px 0 rgba(255,255,255,0.1);
+	
+	
+}
+.submit:hover {
+    opacity:0.85;
+    cursor: pointer;
+}
+.submit:active {
+    border: 1px solid #9e9393;
+    box-shadow: 0 0 10px 5px #cfbfbf inset;
+    -webkit-box-shadow:0 0 10px 5px #217fc7 inset ;
+    -moz-box-shadow: 0 0 10px 5px #217fc7 inset;
+    -ms-box-shadow: 0 0 10px 5px #217fc7 inset;
+    -o-box-shadow: 0 0 10px 5px #217fc7 inset;
+     color: #000;
+    font-weight: bold;
+	width:240px; height:30px; 
+	font-size:14px;
+	align:center;
+    text-align: center;
+    text-shadow: 0 -1px 0 rgba(255,255,255,0.1);
+}
