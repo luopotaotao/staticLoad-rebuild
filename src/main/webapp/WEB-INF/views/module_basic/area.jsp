@@ -25,7 +25,7 @@
     function initUI() {
 
         $('#tree_area').tree({
-            url: '<c:url value="/basic/area/query/0"/>',
+            url: '<c:url value="/basic/area/root"/>',
             method: 'get',
             animate: true,
             dnd: false,

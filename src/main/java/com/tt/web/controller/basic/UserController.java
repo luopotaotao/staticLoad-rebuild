@@ -37,18 +37,17 @@ public class UserController extends BaseController<User> {
         return userService.get(id);
     }
 
-    @RequestMapping(value = "{dept_id}/query", method = RequestMethod.GET)
-    @ResponseBody
-    public JSONObject list(@PathVariable Integer dept_id,
-                           @RequestParam(required = false) String name) {
-
-        name = UrlStringDecoder.decode(name);
-        Map<String, Object> params = createHashMap("dept_id", dept_id);
-//        params.put("role",getSessionInfo().getRole());
-        params.put("name", name);
-        List<User> list = userService.list(params, null, null);
-        return listResponse(list);
-    }
+//    @RequestMapping(value = "{dept_id}/query", method = RequestMethod.GET)
+//    @ResponseBody
+//    public JSONObject list(@PathVariable Integer dept_id,
+//                           @RequestParam(required = false) String name) {
+//
+//        name = UrlStringDecoder.decode(name);
+//        Map<String, Object> params = createHashMap("dept_id", dept_id);
+//        params.put("name", name);
+//        List<User> list = userService.list(params, null, null);
+//        return listResponse(list);
+//    }
 
     @RequestMapping(value = "/queryAll", method = RequestMethod.GET)
     @ResponseBody
@@ -92,7 +91,4 @@ public class UserController extends BaseController<User> {
         return flagResponse(ret);
     }
 
-    public static void main(String[] args) {
-        System.out.println(Arrays.asList(new String[]{"1","2"}));
-    }
 }

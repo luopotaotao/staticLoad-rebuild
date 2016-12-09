@@ -33,13 +33,9 @@ public class TestMyUserRepository implements UserDetailsService{
     @Override
     public MyUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        MyUserDetails userDetails = null;
-        try {
-            List<MyUserDetails> list = getSession().createCriteria(MyUserDetails.class).list();
-            System.out.println(list.size());
-            userDetails = (MyUserDetails) getSession().createCriteria(MyUserDetails.class).add(Restrictions.eq("username", username)).uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
+        MyUserDetails userDetails = (MyUserDetails) getSession().createCriteria(MyUserDetails.class).add(Restrictions.eq("username", username)).uniqueResult();
+        if(userDetails==null){
+            throw new UsernameNotFoundException("系统中不存在该用户!");
         }
         return userDetails;
     }

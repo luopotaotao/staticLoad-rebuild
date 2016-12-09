@@ -75,9 +75,9 @@ public class SchemeController extends BaseController<InspectScheme> {
     //    @RequestMapping(value = "post", method = RequestMethod.POST)
     @RequestMapping(value = "post")
     @ResponseBody
-    public JSONObject add(@ModelAttribute InspectScheme company) {
-        inspectSchemeService.add(company);
-        return flagResponse(company.getId()>0);
+    public JSONObject add(@ModelAttribute InspectScheme scheme) {
+        inspectSchemeService.add(scheme);
+        return flagResponse(scheme.getId()>0);
     }
 
     @RequestMapping(value = "put", method = RequestMethod.POST)

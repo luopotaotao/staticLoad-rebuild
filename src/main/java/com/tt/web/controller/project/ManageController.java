@@ -61,7 +61,7 @@ public class ManageController extends BaseController<Project> {
     @RequestMapping(value = "tree",method = RequestMethod.GET)
     @ResponseBody
     public List<Project> list() {
-        List<Project> list = projectService.list(0);//TODO 此处需要处理
+        List<Project> list = projectService.listByAreaId(null);//TODO 此处需要处理
         return list;
     }
 

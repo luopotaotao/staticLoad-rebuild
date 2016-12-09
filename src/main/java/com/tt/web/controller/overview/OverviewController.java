@@ -62,7 +62,7 @@ public class OverviewController extends BaseController<Overview>{
     @RequestMapping("{area_id}/queryProjects")
     @ResponseBody
     public List<Project> queryProjects(@PathVariable Integer area_id) {
-        List<Project> projects = projectServiceI.list(area_id);
+        List<Project> projects = projectServiceI.listByAreaId(area_id);
         return projects;
     }
 

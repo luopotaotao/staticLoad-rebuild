@@ -21,6 +21,11 @@ public class AreaServiceImpl implements AreaServiceI {
     private AreaDaoI areaDao;
 
     @Override
+    public Area getRoot() {
+        return areaDao.getRoot();
+    }
+
+    @Override
     public Area get(Serializable id) {
         Area ret = areaDao.getById(id);
         return ret;

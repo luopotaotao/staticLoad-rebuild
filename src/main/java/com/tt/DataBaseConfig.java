@@ -30,7 +30,7 @@ public class DataBaseConfig {
                                       @Value("${validationQuery}") String validationQuery
     ) {
         BasicDataSource ds = new BasicDataSource();
-        ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        ds.setDriverClassName("com.mysql.jdbc.Driver");
         ds.setUrl(jdbc_url);
         ds.setUsername(jdbc_username);
         ds.setPassword(jdbc_password);
@@ -38,6 +38,7 @@ public class DataBaseConfig {
         ds.setMaxActive(Integer.parseInt(jdbc_max_active));
         ds.setValidationQuery(validationQuery);
         ds.addConnectionProperty("useSSL", "false");
+
         return ds;
     }
 
@@ -60,12 +61,12 @@ public class DataBaseConfig {
 
         sfb.setPackagesToScan("com.tt.model","com.tt.ext.security");
         Properties properties = new Properties();
-        properties.setProperty("dialect", dialect);
-        properties.setProperty("default_schema", default_schema);
-        properties.setProperty("hbm2ddl.auto", hbm2ddl_auto);
-        properties.setProperty("show_sql", show_sql);
-        properties.setProperty("format_sql", format_sql);
-        properties.setProperty("use_sql_comments", use_sql_comments);
+        properties.setProperty("hibernate.dialect", dialect);
+        properties.setProperty("hibernate.default_schema", default_schema);
+        properties.setProperty("hibernate.hbm2ddl.auto", hbm2ddl_auto);
+        properties.setProperty("hibernate.show_sql", show_sql);
+        properties.setProperty("hibernate.format_sql", format_sql);
+        properties.setProperty("hibernate.use_sql_comments", use_sql_comments);
         sfb.setHibernateProperties(properties);
         return sfb;
     }

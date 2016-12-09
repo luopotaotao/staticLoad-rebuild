@@ -56,7 +56,7 @@ public class ProjectServiceImpl implements ProjectServiceI {
     }
 
     @Override
-    public List<Project> list(Integer area_id) {
+    public List<Project> listByAreaId(Integer area_id) {
         StringBuilder hql = new StringBuilder("from Project WHERE dept_id=:dept_id");
         Map<String, Object> params = new HashMap<>();
 
@@ -65,9 +65,12 @@ public class ProjectServiceImpl implements ProjectServiceI {
             hql.append(" AND (province_id=:area_id or city_id=:area_id)");
         }
         List<Project> list = projectDao.find(hql.toString(),params);
-        List<Integer> ids = list.stream().map(p->p.getId()).collect(Collectors.toList());
-        Map<Integer,Integer> statusMap = listStatus(ids);
-        list.stream().forEach(item->item.setStatus(statusMap.get(item.getId())));
+        if(list!=null&&!list.isEmpty()){
+            List<Integer> ids = list.stream().map(p->p.getId()).collect(Collectors.toList());
+            Map<Integer,Integer> statusMap = listStatus(ids);
+            list.stream().forEach(item->item.setStatus(statusMap.get(item.getId())));
+        }
+
         return list;
     }
     private Map<Integer,Integer> listStatus(List<Integer> ids){
@@ -78,6 +81,7 @@ public class ProjectServiceImpl implements ProjectServiceI {
                 "(SELECT id,inspect_scheme_id FROM b_inspect_plan WHERE inspect_scheme_id in(SELECT id FROM b_inspect_scheme WHERE inspect_project_id in(:ids))) p\n" +
                 "LEFT JOIN(SELECT id,inspect_project_id p_id FROM b_inspect_scheme WHERE inspect_project_id in(:ids)) s ON p.inspect_scheme_id=s.id\n" +
                 " GROUP BY p_id;",params);
+        System.out.println(list);
         list.stream().forEach(row->{ret.put((Integer) row[0],((BigInteger) row[1]).intValue());});
         return ret;
     }

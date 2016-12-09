@@ -34,9 +34,9 @@
                     }).success(function (r) {
 
                         try {
-                            if (r.success) {
+                            if (r.flag) {
                                 //登录成功跳转
-                                window.location.href = "index.jsp";
+                                window.location.href = "<c:url value="/index"/>";
                             } else {
                                 //显示错误信息
                                 art.dialog({

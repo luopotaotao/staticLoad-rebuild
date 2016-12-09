@@ -32,9 +32,8 @@ public class PlanController extends BaseController<InspectPlan> {
         return "module_data/plan_select_scheme";
     }
 
-    @RequestMapping("selectUser/{dept_id}")
-    public String selectUser(@PathVariable Integer dept_id, Model model) {
-        model.addAttribute("dept_id", dept_id);
+    @RequestMapping("selectUser")
+    public String selectUser( Model model) {
         return "module_data/plan_select_user";
     }
 

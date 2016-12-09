@@ -78,21 +78,6 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
 
 
     public Criteria getCriteria(Integer page, Integer pageSize) {
-        //TODO 在这获取用用户信息
-
-//        HttpSession session = ((ServletRequestAttributes) RequestContextHolder
-//                .getRequestAttributes()).getRequest().getSession();
-//        SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
-//        if(sessionInfo!=null){
-//            System.out.println(String.format("sessionInfo is not null:%s", sessionInfo.getName()));
-//        }
-//        boolean flag = entityClass.isAnnotationPresent(NeedDept.class);
-//        Annotation[] annotations = entityClass.getAnnotations();
-//        System.out.println(annotations.length);
-//        if(flag){
-//            NeedDept item = entityClass.getAnnotation(NeedDept.class);
-//            System.out.println(String.format("annotation:%s,value:%s", item.toString(),item.needUser()));
-//        }
 
         Criteria c = getCriteria();
         if (page != null && pageSize != null) {
@@ -112,6 +97,9 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
     @Override
     public Serializable save(T o) {
         if (o != null) {
+            if (entityClass.getSuperclass() == BaseModel.class) {
+                ((BaseModel)o).setDept_id(getDeptId());
+            }
             return this.getCurrentSession().save(o);
         }
         return null;

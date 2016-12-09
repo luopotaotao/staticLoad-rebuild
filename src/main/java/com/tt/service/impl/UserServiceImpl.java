@@ -22,9 +22,6 @@ public class UserServiceImpl implements UserServiceI {
     @Autowired
     private UserDaoI userDao;
 
-    @Autowired
-    private DeptServiceI deptService;
-
     public User get(Integer id) {
         return userDao.getById(id);
     }
@@ -38,24 +35,13 @@ public class UserServiceImpl implements UserServiceI {
     public List<User> list(Map<String,Object> params,Integer page,Integer pageSize) {
         String name = (String) params.get("name");
         Integer current_role = (Integer) params.get("role");
-        List<User> ret = userDao.list(current_role, name, null,null);
+        List<User> ret = userDao.list( name, null,null);
         return ret;
     }
 
     @Override
     public User add(User user) {
-//        Dept dept = deptService.get(dept_id);
-//        user.setDept(dept);
-//        user.setCreatedatetime(new Date());
-//        try {
-//            byte[] salt = PBKDF2.getSalt().getBytes();
-//            String pwd1 = RandomUtil.generateWord();
-//            String pwd = PBKDF2.generateStorngPasswordHash256ByBCP(salt, Encrypt.sha(pwd1));
-//            user.setPwd(pwd);
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
-//        userDao.save(user);
+        userDao.save(user);
         return user;
     }
 
@@ -74,7 +60,7 @@ public class UserServiceImpl implements UserServiceI {
     public boolean isExist(String name) {
         Map<String,Object> params = new HashMap<>();
         params.put("name",name);
-        return userDao.count("select count(*) from User as u where u.name=:name",params)>0;
+        return userDao.count("select count(*) from User as u where u.username=:name",params)>0;
     }
 
     @Override

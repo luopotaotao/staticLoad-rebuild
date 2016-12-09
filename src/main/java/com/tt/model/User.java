@@ -10,13 +10,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "my_user_details")
-public class User {
+public class User extends BaseModel {
     @Id
-    String id;
-    String username;
-    String realName;
-    @ManyToOne
-    Dept dept;
+    private String id;
+    private String username;
+    private String realName;
 
     public String getId() {
         return id;
@@ -40,13 +38,5 @@ public class User {
 
     public void setRealName(String realName) {
         this.realName = realName;
-    }
-
-    public Dept getDept() {
-        return dept;
-    }
-
-    public void setDept(Dept dept) {
-        this.dept = dept;
     }
 }

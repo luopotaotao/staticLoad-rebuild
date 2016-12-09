@@ -360,12 +360,12 @@
         var r = null;
         function initResumable() {
             r = $.getResumble({
-                url: '<c:url value="/inspect_file/upload"/>',
+                url: '<c:url value="/file/upload"/>',
                 fileType: ['png'],
-                successHandler: function (uuid) {
-                    alert('成功保存文件:' + uuid);
-                    $('#dept_logo').textbox('setValue', uuid);
-                    $('#img').attr('src', '<c:url value="/resources/upload/"/>' + uuid);
+                successHandler: function (ret) {
+                    alert('成功保存文件:' + ret.uuid);
+                    $('#dept_logo').textbox('setValue', ret.uuid);
+                    $('#img').attr('src', '<c:url value="/resources/upload/"/>' + ret.uuid);
                 },
                 fileTypeErrorHandler: function () {
                     alert("文件类型错误...");

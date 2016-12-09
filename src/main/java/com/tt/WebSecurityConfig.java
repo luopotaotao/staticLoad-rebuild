@@ -1,10 +1,14 @@
 package com.tt;
 
+import com.tt.ext.security.AuthenticationFilter;
+import com.tt.ext.security.JsonAuthenticationFailureHandler;
+import com.tt.ext.security.JsonAuthenticationSuccessHandler;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,6 +19,8 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -35,10 +41,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     @Qualifier(value = "myUserDetailsService")
     private UserDetailsService userDetailsService;
+
     /**
      * Session 管理
-     *  http://docs.spring.io/spring-security/site/docs/4.2.1.BUILD-SNAPSHOT/reference/htmlsingle/#session-mgmt
-     *  http://www.baeldung.com/spring-security-session
+     * http://docs.spring.io/spring-security/site/docs/4.2.1.BUILD-SNAPSHOT/reference/htmlsingle/#session-mgmt
+     * http://www.baeldung.com/spring-security-session
+     *
      * @param http
      * @throws Exception
      */
@@ -46,41 +54,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-                .headers().frameOptions().sameOrigin().and()
-//                .addFilterBefore(new Filter(){
-//                    @Override
-//                    public void init(FilterConfig filterConfig) throws ServletException {
-//
-//                    }
-//
-//                    @Override
-//                    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-//
-//                    }
-//
-//                    @Override
-//                    public void destroy() {
-//
-//                    }
-//                },UsernamePasswordAuthenticationFilter.class)
-
-                    .authorizeRequests()
+                .csrf().disable()
+                .headers().frameOptions().sameOrigin()
+                .and()
+//                .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authorizeRequests()
                 .antMatchers("/resources/**")
                 .permitAll()
-            .and()
+                .and()
 //                .authorizeRequests().anyRequest().permitAll();;//.and()
                 .formLogin()
                 .loginPage("/login")
-            .and()
+                .failureHandler(failureHandler())
+                .successHandler(successHandler())
+                .and()
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
-            .and()
+                .and()
                 .authorizeRequests()
                 .antMatchers("/login**").permitAll()
                 .anyRequest().authenticated()
-            .and()
+                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .invalidSessionUrl("/login?invalid")  //session无效时页面
@@ -89,9 +85,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .maxSessionsPreventsLogin(false)  //当登录的session到达最大值时:true:禁止登录;false:已有session过期,新用户登录,默认为false
                 .sessionRegistry(sessionRegistry())
                 .expiredUrl("/login?expired") //session过期时页面,过期是由于被其他登录用户挤掉
-            .and()
+                .and()
                 .sessionFixation().migrateSession() //Session Fixation Protection
         ;
+
+
     }
 
     @Override
@@ -104,27 +102,53 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * Session管理中session并发控制需要用到此bean
+     *
      * @return
      */
     @Bean
-    public HttpSessionEventPublisher httpSessionEventPublisher(){
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
         return new HttpSessionEventPublisher();
     }
 
     /**
      * 此bean可以操控已登录的Session
+     *
      * @return
      */
     @Bean
-    public SessionRegistry sessionRegistry(){
+    public SessionRegistry sessionRegistry() {
         SessionRegistry sessionRegistry = new SessionRegistryImpl();
         return sessionRegistry;
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         System.out.println(new StandardPasswordEncoder("1234").encode("root"));
 
         return new StandardPasswordEncoder("1234");
+    }
+
+    @Bean(name = "myAuthenticationManager")
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public AuthenticationFilter authenticationFilter() {
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter();
+        authenticationFilter.setAuthenticationFailureHandler(failureHandler());
+        authenticationFilter.setAuthenticationSuccessHandler(successHandler());
+        return new AuthenticationFilter();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler failureHandler() {
+        return new JsonAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+        return new JsonAuthenticationSuccessHandler();
     }
 }

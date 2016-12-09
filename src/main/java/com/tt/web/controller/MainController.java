@@ -1,13 +1,17 @@
 package com.tt.web.controller;
 
+import com.tt.ext.security.MyUserDetails;
+import com.tt.model.Dept;
+import com.tt.model.User;
+import com.tt.service.DeptServiceI;
+import com.tt.util.SessionUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +21,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 public class MainController {
+
+    @Autowired
+    private DeptServiceI deptService;
+
     @RequestMapping(value = "index",method = RequestMethod.GET)
     public String index(){
         return "main/index";
@@ -26,12 +34,14 @@ public class MainController {
         return "main/admin_login";
     }
     @RequestMapping("/logout")
+    @ResponseBody
     public String logout(HttpServletRequest request, HttpServletResponse response){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/login?logout";
+        response.setStatus(HttpServletResponse.SC_OK);
+        return "{msg:'logout success'}";
     }
 
     @RequestMapping("authimg")
@@ -42,5 +52,17 @@ public class MainController {
     @RequestMapping("/welcome")
     public String welcome(){
         return "main/welcome";
+    }
+    @Secured("hasRole('SUPER')")
+    @RequestMapping("switchDept/{id}")
+    @ResponseBody
+    public Dept switchDept(@PathVariable(value ="id") Integer id){
+        Dept dept = deptService.get(id);
+
+        MyUserDetails userDetails = SessionUtil.getUser();
+        System.out.println("before dept:"+userDetails.getDept().getId());
+        SessionUtil.getUser().setDept(dept);
+        System.out.println("after dept:"+userDetails.getDept().getId());
+        return dept;
     }
 }

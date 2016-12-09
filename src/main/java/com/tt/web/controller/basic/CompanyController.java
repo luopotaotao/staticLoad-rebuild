@@ -28,9 +28,9 @@ public class CompanyController extends BaseController<Company> {
     }
 
     @RequestMapping("partial")
-    public String partial(@RequestParam(name="typ") Byte type, Model model) {
-        if(type!=null){
-            model.addAttribute("typ",type);
+    public String partial(@RequestParam(name = "typ") Byte type, Model model) {
+        if (type != null) {
+            model.addAttribute("typ", type);
         }
         return "module_basic/company_partial";
     }
@@ -49,8 +49,8 @@ public class CompanyController extends BaseController<Company> {
                            @RequestParam(value = "rows", required = false, defaultValue = "10") Integer pageSize) {
         Map<String, Object> params = new HashMap<>();
         name = UrlStringDecoder.decode(name);
-        if (name!=null) {
-            params.put("name",name);
+        if (name != null) {
+            params.put("name", name);
         }
         if (typ != null) {
             params.put("typ", typ);
@@ -63,8 +63,7 @@ public class CompanyController extends BaseController<Company> {
         return listResponse(count, list);
     }
 
-    //    @RequestMapping(value = "post", method = RequestMethod.POST)
-    @RequestMapping(value = "post")
+    @RequestMapping(value = "post", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject add(@ModelAttribute Company company) {
         companyService.add(company);

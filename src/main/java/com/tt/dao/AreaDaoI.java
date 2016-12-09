@@ -15,4 +15,5 @@ public interface AreaDaoI extends BaseDaoI<Area>{
 //
 //
     int del(Integer id);
+    Area getRoot();
 }

@@ -11,4 +11,5 @@ import java.util.Map;
 public interface AreaServiceI extends BaseService<Area>{
     int del(Integer id);
     List<Map<String,Object>> queryAreaByPid(Integer pid);
+    Area getRoot();
 }

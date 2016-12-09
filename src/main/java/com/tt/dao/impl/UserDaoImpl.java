@@ -14,16 +14,7 @@ import java.util.List;
  */
 @Repository("userDao")
 public class UserDaoImpl extends BaseDaoImpl<User> implements UserDaoI {
-    @Override
-    public List<User> list(Integer current_role, String name, Integer page, Integer pageSize) {
-        Criteria criteria = getCriteria(page,pageSize)
-                .add(Restrictions.gt("role",current_role))
-                .addOrder(Order.asc("id"));
-        if(name!=null&&!name.trim().isEmpty()){
-            criteria.add(Restrictions.like("name","%"+name+"%"));
-        }
-        return criteria.list();
-    }
+
     @Override
     public List<User> list( String name, Integer page, Integer pageSize) {
         Criteria criteria = getCriteria(page,pageSize).addOrder(Order.asc("id"));

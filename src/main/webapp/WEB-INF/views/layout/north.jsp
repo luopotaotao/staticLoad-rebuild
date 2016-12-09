@@ -17,29 +17,32 @@
                             if (c) {
                                 $
                                         .ajax({
-                                            url: '<c:url value="/userController/logout"/>',
-                                            type: 'POST',
+                                            url: '<c:url value="/logout"/>',
+                                            type: 'GET',
                                             timeout: 1000,
-                                            success: function (result) {
-                                                location.href = '<c:url value="/"/>';
-                                            },
-                                            error: function () {
-                                                location.href = '<c:url value="/"/>';
-                                            }
-                                        });
+                                            <%--success: function (result) {--%>
+                                            <%--location.href = '<c:url value="/"/>';--%>
+                                            <%--},--%>
+                                            <%--error: function () {--%>
+                                            <%--location.href = '<c:url value="/"/>';--%>
+                                            <%--},--%>
+
+                                        }).always(function () {
+                                    location.href = '<c:url value="/login"/>';
+                                });
                             }
                         });
     }
     function showUserInfo() {
         $.ajax({
-            url:'<c:url value="/userController/userInfo"/>',
-            type:'get',
-            dataType:'json'
+            url: '<c:url value="/userController/userInfo"/>',
+            type: 'get',
+            dataType: 'json'
         }).done(function (ret) {
-            $('#ff_user_info').form('load',ret);
+            $('#ff_user_info').form('load', ret);
             $('#dlg_user_info').dialog('open');
         }).fail(function () {
-            $.messager.alert('提示','获取数据失败,请重新尝试或联系管理员!');
+            $.messager.alert('提示', '获取数据失败,请重新尝试或联系管理员!');
         });
     }
     function editCurrentUserPwd() {
@@ -70,7 +73,7 @@
     }
     function switchDept(id) {
         var base_url = '<c:url value="/resources/upload/"/>';
-        var href = 'userController/switchDept/' + id;
+        var href = '<c:url value="/switchDept/"/>' + id;
         $.ajax({
             url: href,
             type: 'get',
@@ -78,9 +81,9 @@
         }).done(function (ret) {
             if (ret.flag) {
                 var logo = null;
-                if(ret.logo){
-                    logo = '<img src="'+base_url+ret.logo+'">'
-                }else{
+                if (ret.logo) {
+                    logo = '<img src="' + base_url + ret.logo + '">'
+                } else {
                     logo = '<h2 style="color:white;margin: 5px;">智能无线静荷载试验检测云平台</h2>';
                 }
                 $('#logo_div').empty().append(logo);
@@ -98,39 +101,43 @@
         height: 19px;
         vertical-align: -5px;
     }
-    html,body{overflow:hidden;}
-    body
-    {
+
+    html, body {
+        overflow: hidden;
+    }
+
+    body {
         margin: 0px;
-        overflow:hidden;
-        background-color:#2696cb;
+        overflow: hidden;
+        background-color: #2696cb;
 
     }
-    .topul{
+
+    .topul {
         list-style-type: none;
-        margin:0;
-        padding:0;
+        margin: 0;
+        padding: 0;
         margin-top: 20px;
         /*padding-top:3px;*/
-        padding-bottom:8px;
+        padding-bottom: 8px;
         font-size: 13px;
     }
 
-    .topul li
-    {
-        display:inline;
+    .topul li {
+        display: inline;
     }
-    .topul li a
-    {
+
+    .topul li a {
         color: white;
-        text-align:center;
-        text-decoration:none;
-        padding:8px 14px 8px 10px;
+        text-align: center;
+        text-decoration: none;
+        padding: 8px 14px 8px 10px;
     }
-    .topul li a #img
-    {
+
+    .topul li a #img {
         vertical-align: middle;
     }
+
     .topul li a.onnav {
         /*background: url('/public/images/newweb_06.png') no-repeat;*/
     }
@@ -228,28 +235,28 @@
         ">
     <form id="ff_user_info" class="easyui-form" method="post" data-options="novalidate:true"
           action="<c:url value="/basic/user/post"/>"/>
-        <div style="margin-bottom:20px">
-            <input class="easyui-textbox" name="name" style="width:100%"
-                   data-options="label:'账号:',editable:false">
-        </div>
-        <div style="margin-bottom:20px">
-            <input class="easyui-textbox" name="email" style="width:100%"
-                   data-options="label:'Email:',editable:false">
-        </div>
+    <div style="margin-bottom:20px">
+        <input class="easyui-textbox" name="name" style="width:100%"
+               data-options="label:'账号:',editable:false">
+    </div>
+    <div style="margin-bottom:20px">
+        <input class="easyui-textbox" name="email" style="width:100%"
+               data-options="label:'Email:',editable:false">
+    </div>
 
-        <div style="margin-bottom:20px">
-            <input class="easyui-textbox" name="password" style="width:100%"
-                   data-options="label:'原始密码:',required:true"  type="password">
-        </div>
-        <div style="margin-bottom:20px">
-            <input class="easyui-textbox" name="new_password" style="width:100%"
-                   data-options="label:'新密码:',required:true" validType="length[4,32]" id="new_password" type="password">
-        </div>
-        <div style="margin-bottom:20px">
-            <input class="easyui-textbox" name="role" style="width:100%"
-                   data-options="label:'确认密码:',required:true" type="password"
-                   validType="equalTo['#new_password']" invalidMessage="两次输入密码不匹配">
-        </div>
+    <div style="margin-bottom:20px">
+        <input class="easyui-textbox" name="password" style="width:100%"
+               data-options="label:'原始密码:',required:true" type="password">
+    </div>
+    <div style="margin-bottom:20px">
+        <input class="easyui-textbox" name="new_password" style="width:100%"
+               data-options="label:'新密码:',required:true" validType="length[4,32]" id="new_password" type="password">
+    </div>
+    <div style="margin-bottom:20px">
+        <input class="easyui-textbox" name="role" style="width:100%"
+               data-options="label:'确认密码:',required:true" type="password"
+               validType="equalTo['#new_password']" invalidMessage="两次输入密码不匹配">
+    </div>
     </form>
 </div>
 

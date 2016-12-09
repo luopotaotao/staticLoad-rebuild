@@ -42,6 +42,15 @@ public class AreaController extends BaseController<Area> {
 
         return ret;
     }
+    @RequestMapping(value = "root",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONArray root() {
+        JSONArray ret = new JSONArray();
+        Area area = areaService.getRoot();
+        ret.add(area);
+
+        return ret;
+    }
     @RequestMapping(value = "area/{pid}",method = RequestMethod.GET)
     @ResponseBody
     public List<Map<String,Object>> queryCity(@PathVariable Integer pid){
