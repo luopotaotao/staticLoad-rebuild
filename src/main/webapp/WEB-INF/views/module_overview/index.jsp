@@ -38,6 +38,9 @@
                 textField: 'name',
                 animate: true,
                 onClick: function (node) {
+                    //0,1,2  -> 4 7 11
+                    debugger;
+                    centerAndZoom(node.text,[5,7,10][node.level]);
                     removeAllOverlays();
                     if (node.count) {
                         getProjectsAndShow(node.id);
@@ -109,7 +112,7 @@
             $div.width($(document).width() * 0.85);
             var map = new BMap.Map("div_map");
 //            var point = new BMap.Point(113.276, 23.117);
-            map.centerAndZoom("西安", 4);
+            map.centerAndZoom("全国", 5);
 //            map.centerAndZoom(point, 12);                 // 初始化地图，设置中心点坐标和地图级别
             map.enableScrollWheelZoom(); //启用滚轮放大缩小，默认禁用
             map.enableContinuousZoom(); //启用地图惯性拖拽，默认禁用
@@ -138,6 +141,9 @@
             map.centerAndZoom("西安", 4);
         }
 
+        function centerAndZoom(city,level) {
+            map.centerAndZoom(city, level);
+        }
         //显示markers,挂载点击事件,同时设置地图显示范围
         function showMarkers(markers, callback) {
             if ($.isArray(markers)) {
