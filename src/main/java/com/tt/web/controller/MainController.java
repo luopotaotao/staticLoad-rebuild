@@ -2,7 +2,6 @@ package com.tt.web.controller;
 
 import com.tt.ext.security.MyUserDetails;
 import com.tt.model.Dept;
-import com.tt.model.User;
 import com.tt.service.DeptServiceI;
 import com.tt.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;

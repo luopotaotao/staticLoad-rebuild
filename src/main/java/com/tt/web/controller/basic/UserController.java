@@ -1,15 +1,16 @@
 package com.tt.web.controller.basic;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tt.ext.security.MyUserDetails;
+import com.tt.service.UserServiceI;
+import com.tt.util.UrlStringDecoder;
+import com.tt.web.controller.BaseController;
+import com.tt.web.exception.ExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import com.tt.web.controller.BaseController;
-import com.tt.model.User;
-import com.tt.service.UserServiceI;
-import com.tt.util.UrlStringDecoder;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("basic/user")
-public class UserController extends BaseController<User> {
+public class UserController extends BaseController<MyUserDetails> {
     @Autowired
     private UserServiceI userService;
 
@@ -33,7 +34,7 @@ public class UserController extends BaseController<User> {
 
     @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public User get(@PathVariable int id) {
+    public MyUserDetails get(@PathVariable int id) {
         return userService.get(id);
     }
 
@@ -45,7 +46,7 @@ public class UserController extends BaseController<User> {
 //        name = UrlStringDecoder.decode(name);
 //        Map<String, Object> params = createHashMap("dept_id", dept_id);
 //        params.put("name", name);
-//        List<User> list = userService.list(params, null, null);
+//        List<MyUserDetails> list = userService.list(params, null, null);
 //        return listResponse(list);
 //    }
 
@@ -58,18 +59,16 @@ public class UserController extends BaseController<User> {
         if (name != null) {
             params.put("name", name);
         }
-        List<User> list = userService.list(params, null, null);
+        List<MyUserDetails> list = userService.list(params, null, null);
         return listResponse(list);
     }
 
 
     @RequestMapping(value = "post", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject add(@ModelAttribute User user, BindingResult result) {
+    public JSONObject add(@ModelAttribute MyUserDetails user, BindingResult result) {
         if (userService.isExist(user.getUsername())) {
-            JSONObject ret = jsonResponse("flag", false);
-            ret.put("msg", "exist");
-            return ret;
+            throw new ExistException("账号已使用,请选择其他账号!");
         }
 
         userService.add(user);
@@ -79,9 +78,9 @@ public class UserController extends BaseController<User> {
 
     @RequestMapping(value = "put", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject update(@ModelAttribute User user) {
-        userService.update(user);
-        return flagResponse(user.getId());
+    public JSONObject update(@ModelAttribute MyUserDetails MyUserDetails) {
+        userService.update(MyUserDetails);
+        return flagResponse(MyUserDetails.getId());
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)

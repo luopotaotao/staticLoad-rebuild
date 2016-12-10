@@ -1,7 +1,7 @@
 
 <%--
   Created by IntelliJ IDEA.
-  User: tt
+  Inspector: tt
   Date: 2016/10/7
   Time: 23:46
   To change this template use File | Settings | File Templates.

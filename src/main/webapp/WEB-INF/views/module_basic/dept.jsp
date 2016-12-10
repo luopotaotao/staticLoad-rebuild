@@ -282,7 +282,7 @@
 
 
     <%--function manageUsers(id) {--%>
-        <%--var href = '../basic/user/index/'+id;--%>
+        <%--var href = '../basic/inspector/index/'+id;--%>
         <%--openDialog('人员管理',href);--%>
     <%--}--%>
     <%--function manageEquipments(id){--%>

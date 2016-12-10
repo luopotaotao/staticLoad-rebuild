@@ -19,7 +19,7 @@ import java.util.Properties;
  */
 @Configuration
 @ComponentScan("com.tt.service")
-@EnableTransactionManagement
+@EnableTransactionManagement(proxyTargetClass = true)
 public class DataBaseConfig {
     @Bean
     public BasicDataSource dataSource(@Value("${jdbc_url}") String jdbc_url,

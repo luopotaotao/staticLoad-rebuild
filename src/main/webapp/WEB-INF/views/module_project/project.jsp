@@ -69,7 +69,7 @@
                    <%--data-options="label:'施工单位:',labelAlign:'right',required:true,editable:false,buttonText:'选择',--%>
                    <%--buttonIcon:'icon-search'" url="<c:url value="/basic/company/partial">--%>
 
-            <%--<input id="project_select_user" class="easyui-textbox select" name="user.id" style="width:45%"--%>
+            <%--<input id="project_select_user" class="easyui-textbox select" name="inspector.id" style="width:45%"--%>
                    <%--data-options="label:'监理单位:',labelAlign:'right',required:true,editable:false,buttonText:'选择',--%>
                    <%--buttonIcon:'icon-search'" url="<c:url value="/basic/company/partial">--%>
         <%--</div>--%>
@@ -215,7 +215,7 @@
                 <%--{field: 'lng', title: '经度', width: 80},--%>
                 <%--{field: 'constructor', title: '建设单位', width: 80,formatter:function(val){return val?val.name:''}},--%>
                 <%--{field: 'builder', title: '施工单位', width: 80,formatter:function(val){return val?val.name:''}},--%>
-                <%--{field: 'user', title: '监理单位', width: 80,formatter:function(val){return val?val.name:''}},--%>
+                <%--{field: 'inspector', title: '监理单位', width: 80,formatter:function(val){return val?val.name:''}},--%>
 
             <%--]],--%>
             <%--onHeaderContextMenu: function (e, field) {--%>
@@ -398,9 +398,9 @@
                     <%--$('#project_select_builder').textbox('setValue',data.builder.id)--%>
                     <%--$('#project_select_builder').textbox('setText',data.builder.name);--%>
                 <%--}--%>
-                <%--if(data.user){--%>
-                    <%--$('#project_select_user').textbox('setValue',data.user.id)--%>
-                    <%--$('#project_select_user').textbox('setText',data.user.name);--%>
+                <%--if(data.inspector){--%>
+                    <%--$('#project_select_user').textbox('setValue',data.inspector.id)--%>
+                    <%--$('#project_select_user').textbox('setText',data.inspector.name);--%>
                 <%--}--%>
 
                 <%--$ff.form({url: 'put'});--%>

@@ -28,7 +28,7 @@ public class RoleAspect {
 //        System.out.println("before");
 //        try {
 //            Object[] args = pj.getArgs();
-//            MyUserDetails user = SessionUtil.getUser();
+//            MyUserDetails user = SessionUtil.getInspector();
 //
 //            String username= user.getUsername();
 //            System.out.println(username);

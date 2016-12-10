@@ -1,6 +1,7 @@
 package com.tt.web.controller.inspect;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tt.service.InspectDataServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import com.tt.service.InspectPlanServiceI;
 import com.tt.util.UrlStringDecoder;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by tt on 2016/10/2.
@@ -22,6 +24,8 @@ public class PlanController extends BaseController<InspectPlan> {
     @Autowired
     private InspectPlanServiceI inspectPlanService;
 
+    @Autowired
+    private InspectDataServiceI inspectDataService;
     @RequestMapping("index")
     public String index(Model model) {
         return "module_data/plan";
@@ -37,9 +41,8 @@ public class PlanController extends BaseController<InspectPlan> {
         return "module_data/plan_select_user";
     }
 
-    @RequestMapping("selectEquipment/{dept_id}")
-    public String selectEquipment(@PathVariable Integer dept_id, Model model) {
-        model.addAttribute("dept_id", dept_id);
+    @RequestMapping("selectEquipment")
+    public String selectEquipment( Model model) {
         return "module_data/plan_select_equipment";
     }
 
@@ -88,6 +91,17 @@ public class PlanController extends BaseController<InspectPlan> {
         List<InspectPlan> list;
         if(count>0){
             list = inspectPlanService.list(params);
+            if(list!=null&&list.size()>0){
+                List<Integer> ids = list.stream().map(item->item.getId()).collect(Collectors.toList());
+                Map<Integer,Double> maxLoads= inspectDataService.getMaxLoad(ids);
+                Map<Integer,Double> maxOffsets= inspectDataService.getMaxOffset(ids);
+                list.stream().forEach(item->{
+                    Integer item_id = item.getId();
+                    item.setMaxLoad(maxLoads.get(item_id));
+                    item.setMaxOffset(maxLoads.get(item_id));
+                });
+            }
+
         }else{
             list = new LinkedList<>();
         }

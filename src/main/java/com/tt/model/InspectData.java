@@ -192,12 +192,16 @@ public class InspectData  extends BaseModel{
         }
         return null;
     }
-    @Transient
+    @Basic
+    @Column(name = "AVG_HZJC")
     public Double getAvgHzjc() {
         if(this.avg_hzjc == null){
             this.avg_hzjc = calcAvg(getHzjc_str());
         }
         return this.avg_hzjc;
+    }
+    public void setAvgHzjc(Double avg_hzjc) {
+        this.avg_hzjc = avg_hzjc;
     }
 
     public void setHzjc_str(String hzjc_str) {
@@ -217,12 +221,16 @@ public class InspectData  extends BaseModel{
         }
         return null;
     }
-    @Transient
+    @Basic
+    @Column(name = "AVG_WYJC")
     public Double getAvgWyjc() {
         if(this.avg_wyjc == null){
             this.avg_wyjc = calcAvg(getWyjc_str());
         }
         return this.avg_wyjc;
+    }
+    public void setAvgWyjc(Double avg_wyjc) {
+        this.avg_wyjc = avg_wyjc;
     }
 
     public void setWyjc_str(String wyjc_str) {

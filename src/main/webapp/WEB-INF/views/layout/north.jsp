@@ -185,7 +185,8 @@
         <div style="margin-top: 10px;text-align: right;margin-right: 5px;">
 
             <div style="margin-right: 5px">当前用户：
-                <sec:authentication property="principal.realName"/>
+                <sec:authentication property="principal.realName" var="realName"/>
+                ${realName}
             </div>
 
             <div style="margin-top: 10px">
@@ -234,7 +235,7 @@
             }]
         ">
     <form id="ff_user_info" class="easyui-form" method="post" data-options="novalidate:true"
-          action="<c:url value="/basic/user/post"/>"/>
+          action="<c:url value="/basic/inspector/post"/>"/>
     <div style="margin-bottom:20px">
         <input class="easyui-textbox" name="name" style="width:100%"
                data-options="label:'账号:',editable:false">

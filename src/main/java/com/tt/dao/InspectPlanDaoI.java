@@ -12,4 +12,5 @@ public interface InspectPlanDaoI extends BaseDaoI<InspectPlan> {
     List<InspectPlan> list(String name, Integer page, Integer pageSize);
     InspectPlan getByPrgStzhDevNB(String prg, String stzh, String DevNB);
     boolean isExistStzh(Integer project_id, String stzh);
+
 }

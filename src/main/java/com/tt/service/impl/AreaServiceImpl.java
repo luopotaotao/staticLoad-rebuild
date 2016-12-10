@@ -64,7 +64,6 @@ public class AreaServiceImpl implements AreaServiceI {
     /**
      *
      * @param pid pid为0时,查找level为0,也就是全国下面的省份
-     * @param dept_id
      * @return
      */
     @Override

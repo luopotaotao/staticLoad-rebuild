@@ -36,7 +36,6 @@ public class EquipmentServiceImpl implements EquipmentServiceI {
 
     @Override
     public Equipment add(Equipment equipment) {
-  //      equipment.setDept_id(dept_id);
         equipmentDao.save(equipment);
         return equipment;
     }
@@ -54,7 +53,6 @@ public class EquipmentServiceImpl implements EquipmentServiceI {
 
     @Override
     public Equipment update(Equipment equipment) {
-  //      equipment.setDept_id(dept_id);
         equipmentDao.update(equipment);
         return equipment;
     }

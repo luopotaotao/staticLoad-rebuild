@@ -18,7 +18,7 @@ public class Project extends BaseModel {
     private Float lng;
     private Company constructor;
     private Company builder;
-    private Company user;
+    private Company inspector;
     private String note;
     private Integer status;
     private List<InspectScheme> children;
@@ -127,12 +127,12 @@ public class Project extends BaseModel {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "inspector_id")
-    public Company getUser() {
-        return user;
+    public Company getInspector() {
+        return inspector;
     }
 
-    public void setUser(Company user) {
-        this.user = user;
+    public void setInspector(Company inspector) {
+        this.inspector = inspector;
     }
 
     @Basic

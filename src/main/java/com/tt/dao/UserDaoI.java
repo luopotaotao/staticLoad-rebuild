@@ -1,12 +1,13 @@
 package com.tt.dao;
 
-import com.tt.model.User;
+import com.tt.ext.security.MyUserDetails;
+import com.tt.model.Inspector;
 
 import java.util.List;
 
 /**
  * Created by taotao on 2016/9/23.
  */
-public interface UserDaoI extends BaseDaoI<User> {
-    List<User> list(String name, Integer page, Integer pageSize);
+public interface UserDaoI extends BaseDaoI<MyUserDetails> {
+    List<MyUserDetails> list(String name, Integer page, Integer pageSize);
 }

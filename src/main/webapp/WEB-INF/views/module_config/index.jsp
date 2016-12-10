@@ -49,7 +49,7 @@
         var dept_id = '${dept_id}';
         var baseUrl = '<c:url value="/${baseUrl}"/>';
         $('#dg_user').datagrid({
-            url: '../basic/user/queryAll',
+            url: '../basic/inspector/queryAll',
             method: 'get',
 //                title: '人员管理',
 //                iconCls: 'icon-save',

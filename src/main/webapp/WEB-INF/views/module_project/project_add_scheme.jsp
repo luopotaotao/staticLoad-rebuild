@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <script type="text/javascript" src="<c:url value="/resources/jslib/resumable.js"/>" type="text/javascript"
         charset="utf-8"></script>
 <script type="text/javascript" src="<c:url value="/resources/jslib/my_resumble.js"/>" type="text/javascript"
@@ -46,13 +47,12 @@
                    data-options="label:'总桩数:',labelAlign:'right',required:true">
         </div>
         <div style="margin-bottom:20px">
-            <input class="easyui-textbox select" name="dept.id" style="width:100%"
-                   data-options="label:'检测单位:',labelAlign:'right',required:true,editable:false,buttonText:'选择',
-                   buttonIcon:'icon-search'" url="<c:url value="/inspect/scheme/selectDept"/>">
+            <input class="easyui-textbox" style="width:100%"
+                   data-options="label:'检测单位:',labelAlign:'right',required:true,editable:false,value:'<sec:authentication property="principal.dept.name"/>'">
         </div>
         <div id="approval_file_id_div" style="margin-bottom:20px">
             <input class="easyui-textbox" id="approval_file_id" name="approval_file.uuid" style="width:100%"
-                   data-options="label:'检测方案审批表:',labelAlign:'right',required:true,editable:false,buttonText:'选择',
+                   data-options="label:'检测方案审批表:',labelAlign:'right',required:false,editable:false,buttonText:'选择',
                    buttonIcon:'icon-search'">
         </div>
         <div id="inspect_file_id_div" style="margin-bottom:20px">

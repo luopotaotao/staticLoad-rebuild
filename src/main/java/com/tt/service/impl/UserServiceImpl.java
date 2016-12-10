@@ -1,10 +1,16 @@
 package com.tt.service.impl;
 
 import com.tt.dao.UserDaoI;
-import com.tt.model.User;
-import com.tt.service.DeptServiceI;
+import com.tt.ext.security.MyUserDetails;
 import com.tt.service.UserServiceI;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,31 +22,36 @@ import java.util.Map;
 /**
  * Created by taotao on 2016/9/23.
  */
-@Service("userService")
+@Service
+@Qualifier("myUserDetailsService")
 @Transactional
-public class UserServiceImpl implements UserServiceI {
+public class UserServiceImpl implements UserServiceI,UserDetailsService {
     @Autowired
     private UserDaoI userDao;
 
-    public User get(Integer id) {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public MyUserDetails get(Integer id) {
         return userDao.getById(id);
     }
 
     @Override
-    public User get(Serializable id) {
+    public MyUserDetails get(Serializable id) {
         return null;
     }
 
     @Override
-    public List<User> list(Map<String,Object> params,Integer page,Integer pageSize) {
+    public List<MyUserDetails> list(Map<String,Object> params, Integer page, Integer pageSize) {
         String name = (String) params.get("name");
         Integer current_role = (Integer) params.get("role");
-        List<User> ret = userDao.list( name, null,null);
+        List<MyUserDetails> ret = userDao.list( name, null,null);
         return ret;
     }
 
     @Override
-    public User add(User user) {
+    public MyUserDetails add(MyUserDetails user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.save(user);
         return user;
     }
@@ -53,24 +64,40 @@ public class UserServiceImpl implements UserServiceI {
         Map<String, Object> params = new HashMap<>();
         params.put("ids", ids);
         //TODO 校验是否有权限
-        return userDao.executeHql("delete from User where id in (:ids)", params);
+        return userDao.executeHql("delete from MyUserDetails where id in (:ids)", params);
     }
 
     @Override
     public boolean isExist(String name) {
         Map<String,Object> params = new HashMap<>();
         params.put("name",name);
-        return userDao.count("select count(*) from User as u where u.username=:name",params)>0;
+        return userDao.count("select count(*) from MyUserDetails as u where u.username=:name",params)>0;
     }
 
     @Override
-    public User update(User user) {
-        User oldUser = this.get(user.getId());
+    public MyUserDetails update(MyUserDetails MyUserDetails) {
+        MyUserDetails oldMyUserDetails = this.get(MyUserDetails.getId());
 //        Dept dept = deptService.get(dept_id);
-//        user.setDept(dept);
-//        oldUser.setEmail(user.getEmail());
-//        oldUser.setRole(user.getRole());
-        userDao.update(oldUser);
-        return user;
+//        MyUserDetails.setDept(dept);
+//        oldMyUserDetails.setEmail(MyUserDetails.getEmail());
+//        oldMyUserDetails.setRole(MyUserDetails.getRole());
+        userDao.update(oldMyUserDetails);
+        return MyUserDetails;
+    }
+    @Autowired
+    private SessionFactory sessionFactory;
+
+    private Session getSession() {
+        return sessionFactory.getCurrentSession();
+    }
+
+    @Override
+    public MyUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        MyUserDetails userDetails = (MyUserDetails) getSession().createCriteria(MyUserDetails.class).add(Restrictions.eq("username", username)).uniqueResult();
+        if(userDetails==null){
+            throw new UsernameNotFoundException("系统中不存在该用户!");
+        }
+        return userDetails;
     }
 }

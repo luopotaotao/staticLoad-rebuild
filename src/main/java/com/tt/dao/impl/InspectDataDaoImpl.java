@@ -45,4 +45,19 @@ public class InspectDataDaoImpl extends BaseDaoImpl<InspectData> implements Insp
         }
         return id;
     }
+    @Override
+    public List<Object[]> getMaxLoadByPlanIds(List<Integer> ids) {
+        String sql = "select plan_id,max(avg_hzjc) from (select * from b_inspect_data where plan_id in(:ids)) a GROUP BY plan_id";
+        Map<String,Object> params = new HashMap<>();
+        params.put("ids",ids);
+        return findBySql(sql,params);
+    }
+
+    @Override
+    public List<Object[]> getMaxOffsetByPlanIds(List<Integer> ids) {
+        String sql = "select plan_id,max(avg_wyjc) from (select * from b_inspect_data where plan_id in(:ids)) a GROUP BY plan_id";
+        Map<String,Object> params = new HashMap<>();
+        params.put("ids",ids);
+        return findBySql(sql,params);
+    }
 }

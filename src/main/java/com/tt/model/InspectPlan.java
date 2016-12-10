@@ -1,6 +1,8 @@
 package com.tt.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,15 +17,19 @@ public class InspectPlan extends BaseModel {
     @JsonIgnoreProperties(value = {"project","basement_lev","safety_lev","pile_count","dept","approval_file","inspect_file","inspectItem","children","isDeleted"})
     private InspectScheme inspectScheme;
     //    private List<InspectMethod> inspectMethods;
-    private User user;
+    private Inspector inspector;
     private Equipment equipment;
     private String stzh;
     private Date start_time;
     private Date end_time;
-    private User majorUser;
-    private User assistantUser;
+    private Inspector majorInspector;
+    private Inspector assistantInspector;
+    private InspectMethod inspectMethod;
     private String note;
-    @JsonIgnoreProperties(value = {"name","province","city","address","lat","lng","constructor","builder","user","note","status","children"})
+    private Double maxLoad;
+    private Double maxOffset;
+
+    @JsonIgnoreProperties(value = {"name","province","city","address","lat","lng","constructor","builder","inspector","note","status","children"})
     private Project project;
     private List<InspectMethod> inspectMethods;
 
@@ -81,12 +87,12 @@ public class InspectPlan extends BaseModel {
 
     @ManyToOne
     @JoinColumn(name = "inspector_id")
-    public User getUser() {
-        return user;
+    public Inspector getInspector() {
+        return inspector;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setInspector(Inspector inspector) {
+        this.inspector = inspector;
     }
 
     @ManyToOne
@@ -101,6 +107,8 @@ public class InspectPlan extends BaseModel {
 
     @Basic
     @Column(name = "start_time")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     public Date getStart_time() {
         return start_time;
     }
@@ -111,6 +119,8 @@ public class InspectPlan extends BaseModel {
 
     @Basic
     @Column(name = "end_time")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     public Date getEnd_time() {
         return end_time;
     }
@@ -122,22 +132,22 @@ public class InspectPlan extends BaseModel {
 
     @ManyToOne
     @JoinColumn(name = "major_inspector_id")
-    public User getMajorUser() {
-        return majorUser;
+    public Inspector getMajorInspector() {
+        return majorInspector;
     }
 
-    public void setMajorUser(User majorUser) {
-        this.majorUser = majorUser;
+    public void setMajorInspector(Inspector majorInspector) {
+        this.majorInspector = majorInspector;
     }
 
     @ManyToOne
     @JoinColumn(name = "assistant_inspector_id")
-    public User getAssistantUser() {
-        return assistantUser;
+    public Inspector getAssistantInspector() {
+        return assistantInspector;
     }
 
-    public void setAssistantUser(User assistantUser) {
-        this.assistantUser = assistantUser;
+    public void setAssistantInspector(Inspector assistantInspector) {
+        this.assistantInspector = assistantInspector;
     }
 
     @Basic
@@ -178,5 +188,32 @@ public class InspectPlan extends BaseModel {
 
     public void setInspectMethods(List<InspectMethod> inspectMethods) {
         this.inspectMethods = inspectMethods;
+    }
+
+    @Transient
+    public Double getMaxLoad() {
+        return maxLoad;
+    }
+
+    public void setMaxLoad(Double maxLoad) {
+        this.maxLoad = maxLoad;
+    }
+    @Transient
+    public Double getMaxOffset() {
+        return maxOffset;
+    }
+
+    public void setMaxOffset(Double maxOffset) {
+        this.maxOffset = maxOffset;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "inspect_method_id")
+    public InspectMethod getInspectMethod() {
+        return inspectMethod;
+    }
+
+    public void setInspectMethod(InspectMethod inspectMethod) {
+        this.inspectMethod = inspectMethod;
     }
 }

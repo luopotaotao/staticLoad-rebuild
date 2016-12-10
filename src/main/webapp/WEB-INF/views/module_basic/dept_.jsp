@@ -261,7 +261,7 @@
                 }],
                 onClose: function () {
                     r.cancel();
-                    $('#ff_user').form('clear');
+                    $('#ff').form('clear');
                 },
                 onBeforeOpen: function () {
                     initResumable();
@@ -350,7 +350,7 @@
 
 
         function manageTUsers(id) {
-            var href = '<c:url value="/basic/user/index/"/>' + id;
+            var href = '<c:url value="/basic/inspector/index/"/>' + id;
             openDialog('账号管理', href);
         }
         function manageEquipments(id) {
@@ -411,7 +411,11 @@
                 <input class="easyui-textbox" name="id" style="width:100%" data-options="label:'企业编号:',required:true">
             </div>
             <div style="margin-bottom:20px">
-                <input class="easyui-textbox" name="name" style="width:100%"
+                <input class="easyui-textbox" name="username" style="width:100%"
+                       data-options="label:'账号:',required:true">
+            </div>
+            <div style="margin-bottom:20px">
+                <input class="easyui-textbox" name="realName" style="width:100%"
                        data-options="label:'姓名:',required:true">
             </div>
             <div style="margin-bottom:20px">
@@ -437,9 +441,8 @@
 
     <script type="text/javascript">
         $(function () {
-            var dept_id = '${dept_id}';
             $('#dg_user').datagrid({
-                url: '<c:url value="/basic/user/queryAll"/>',
+                url: '<c:url value="/basic/inspector/queryAll"/>',
                 method: 'get',
 //                title: '人员管理',
 //                iconCls: 'icon-save',
@@ -526,9 +529,9 @@
                 var $ff = $('#ff_user');
                 if (data) {
                     $ff.form('load', data);
-                    $ff.form({url: '../basic/user/put'});
+                    $ff.form({url: '../basic/inspector/put'});
                 } else {
-                    $ff.form({url: '../basic/user/post'});
+                    $ff.form({url: '../basic/inspector/post'});
                 }
                 $('#user_dept_id').textbox('setValue', dept_id);
                 $('#dlg_user_edit').dialog('open');
@@ -569,7 +572,7 @@
             //TODO 删除用户与删除dept冲突
             function remove(ids) {
                 $.ajax({
-                    url: '<c:url value="/basic/user/delete"/>',
+                    url: '<c:url value="/basic/inspector/delete"/>',
                     data: {ids: ids},
                     type: 'post',
                     dataType: 'json'

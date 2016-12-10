@@ -30,6 +30,10 @@ public class InspectDataServiceImpl implements InspectDataServiceI {
         params.put("STZH",STZH);
         params.put("loadFlag",loadFlag);
         List<InspectData> ret = inspectDataDao.find(hql, params);
+//        ret.stream().forEach(item->{
+//            inspectDataDao.saveOrUpdate(item);
+//            System.out.println(item.getAvgWyjc());
+//        });
         return calcDurationAndCurWyjc(ret);
     }
 
@@ -276,4 +280,27 @@ public class InspectDataServiceImpl implements InspectDataServiceI {
         return ret;
     }
 
+    @Override
+    public Map<Integer, Double> getMaxLoad(List<Integer> plan_ids) {
+        if(plan_ids==null||plan_ids.isEmpty()){
+            return null;
+        }
+        Map<Integer,Double> ret = new HashMap<>();
+        inspectDataDao.getMaxLoadByPlanIds(plan_ids).stream().forEach(row->{
+            ret.put((Integer) row[0],(Double) row[1]);
+        });
+        return ret;
+    }
+
+    @Override
+    public Map<Integer, Double> getMaxOffset(List<Integer> plan_ids) {
+        if(plan_ids==null||plan_ids.isEmpty()){
+            return null;
+        }
+        Map<Integer,Double> ret = new HashMap<>();
+        inspectDataDao.getMaxOffsetByPlanIds(plan_ids).stream().forEach(row->{
+            ret.put((Integer) row[0],(Double) row[1]);
+        });
+        return ret;
+    }
 }

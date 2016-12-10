@@ -1,5 +1,6 @@
 package com.tt.ext.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tt.model.Dept;
 
 import javax.persistence.*;
@@ -11,9 +12,11 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "my_user_details")
+@JsonIgnoreProperties(value = {"password"})
 public class MyUserDetails implements Serializable, org.springframework.security.core.userdetails.UserDetails {
 
     @Id
+    @GeneratedValue
     private Integer id;
     private String username;
     private String password;
@@ -29,6 +32,9 @@ public class MyUserDetails implements Serializable, org.springframework.security
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "authorities",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name="role_id"))
     private Set<Authority> authorities;
+
+    private boolean isDeleted;
+
     @Override
     public Set<Authority> getAuthorities() {
         return authorities;
@@ -122,6 +128,16 @@ public class MyUserDetails implements Serializable, org.springframework.security
 
     public void setDept(Dept dept) {
         this.dept = dept;
+    }
+
+    @Basic
+    @Column(name = "deleted")
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     @Override

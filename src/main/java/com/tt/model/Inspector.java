@@ -1,26 +1,24 @@
 package com.tt.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by tt on 2016/12/7.
  */
 @Entity
 @Table(name = "my_user_details")
-public class User extends BaseModel {
+public class Inspector extends BaseModel {
     @Id
-    private String id;
+    @GeneratedValue
+    private Integer id;
     private String username;
     private String realName;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

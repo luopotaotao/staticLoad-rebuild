@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page trimDirectiveWhitespaces="true" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>智能无线静荷载试验检测云平台</title>
+    <title>智能无线静荷载试验检测云平台<sec:authentication property="principal.dept.name"/></title>
     <jsp:include page="../layout/common.jsp"></jsp:include>
     <style type="text/css">
         .info_form_hidden {
@@ -24,6 +26,12 @@
             $.project.addProject()
         }catch(e){
         }
+    }
+  },{
+    id:'tools_reload_project',
+    iconCls:'icon-reload',
+    handler:function(){
+        $tree_menu.tree('reload');
     }
   }],collapsible:false " title="工程列表" style="width: 200px; overflow: hidden;">
     <div class="easyui-panel" style="padding:5px">
@@ -135,7 +143,7 @@
 
                 </div>
                 <div style="margin-bottom:20px">
-                    <input id="project_select_user" class="easyui-textbox select" name="user.id"
+                    <input id="project_select_inspector" class="easyui-textbox select" name="inspector.id"
                            style="width:250px"
                            data-options="label:'监理单位:',labelAlign:'right',required:true,editable:false,buttonText:'选择',
                    buttonIcon:'icon-search'"
@@ -208,11 +216,8 @@
                            data-options="label:'总桩数:',labelAlign:'right',required:true">
                 </div>
                 <div style="margin-bottom:20px">
-                    <input id="project_scheme_dept" class="easyui-textbox select" name="dept.id"
-                           style="width:500px"
-                           data-options="label:'检测单位:',labelAlign:'right',required:true,editable:false,buttonText:'选择',
-                   buttonIcon:'icon-search'"
-                           url="<c:url value="/inspect/scheme/selectDept"/>"/>
+                    <input id="project_scheme_dept" class="easyui-textbox" style="width:500px"
+                           data-options="label:'检测单位:',labelAlign:'right',required:true"/>
                 </div>
                 <div style="margin-bottom:20px">
                     <input class="easyui-textbox" id="approval_file_uuid" name="approval_file.uuid" style="width:500px"
@@ -244,12 +249,12 @@
                 <tr>
                     <th data-options="field:'name',align:'center',width:80">计划名称</th>
                     <th data-options="field:'stzh',align:'center',width:80">桩号</th>
-                    <th data-options="field:'user',align:'center',width:80,formatter:function(val,row){return val?val.name:'';}">检测负责人</th>
+                    <th data-options="field:'inspector',align:'center',width:80,formatter:function(val,row){return val?val.realName:'';}">检测负责人</th>
                     <th data-options="field:'equipment',align:'center',width:80,formatter:function(val,row){return val?val.name:'';}">设备编号</th>
                     <th data-options="field:'start_time',align:'center',width:80,formatter:function(val,row){return $.isNumeric(val)?$.DateUtil.format(new Date(val),'yyyy-MM-dd'):'';}">开始日期</th>
                     <th data-options="field:'end_time',align:'center',width:80,formatter:function(val,row){return $.isNumeric(val)?$.DateUtil.format(new Date(val),'yyyy-MM-dd'):'';}">结束日期</th>
-                    <th data-options="field:'devstr',align:'center',width:80">最大加载值</th>
-                    <th data-options="field:'devstr',align:'center',width:80">最大位移值</th>
+                    <th data-options="field:'maxLoad',align:'center',width:80">最大加载值</th>
+                    <th data-options="field:'maxOffset',align:'center',width:80">最大位移值</th>
                     <th data-options="field:'project',align:'center',width:80,formatter:function(val,row){return '<a href=\'javascript:$.project.clickNode('+val.id+','+row.inspectScheme.id+','+row.id+')\'>查看</a>';}">查看</th>
                 </tr>
                 </thead>
@@ -285,8 +290,8 @@
                            data-options="label:'桩号:',labelAlign:'right',required:true">
                 </div>
                 <div style="margin-bottom:20px">
-                    <input id="project_scheme_plan_user" class="easyui-textbox select-user"
-                           name="user.id"
+                    <input id="project_scheme_plan_inspector" class="easyui-textbox select-inspector"
+                           name="inspector.id"
                            style="width:500px"
                            data-options="label:'检测负责人:',labelAlign:'right',required:true,editable:false,buttonText:'选择',
                    buttonIcon:'icon-search'">
@@ -312,22 +317,22 @@
                            data-options="label:'结束日期:',labelAlign:'right',required:true,editable:false">
                 </div>
                 <div style="margin-bottom:20px">
-                    <input id="project_scheme_plan_majorUser" class="easyui-textbox select"
-                           name="majorUser.id"
+                    <input id="project_scheme_plan_majorInspector" class="easyui-textbox select"
+                           name="majorInspector.id"
                            style="width:500px"
                            data-options="label:'主检人:',labelAlign:'right',required:true,editable:false,buttonText:'选择',
                    buttonIcon:'icon-search'">
                 </div>
                 <div style="margin-bottom:20px">
-                    <input id="project_scheme_plan_assistantUser" class="easyui-textbox select"
-                           name="assistantUser.id" style="width:500px"
+                    <input id="project_scheme_plan_assistantInspector" class="easyui-textbox select"
+                           name="assistantInspector.id" style="width:500px"
                            data-options="label:'副检人:',labelAlign:'right',required:true,editable:false,buttonText:'选择',
                    buttonIcon:'icon-search'">
                 </div>
 
                 <div style="margin-bottom:20px">
                     <div style="margin-bottom:20px">
-                        <select id="inspect_method" class="easyui-combobox" name="inspectMethods" style="width:500px"
+                        <select id="project_scheme_plan_inspectMethod" class="easyui-combobox" name="inspectMethod" style="width:500px"
                                 data-options="label:'检测项目:',
             labelAlign:'right',
             method:'get',
@@ -371,7 +376,7 @@
         });
         var $tree_menu = $('#tree_menu');
         initUI();
-        var project_id = ${project_id};
+        var project_id = '${project_id}';
 
         function initUI() {
             $tree_menu.tree({
@@ -431,7 +436,7 @@
             $('#project_province_id').combobox('select', data.province.id);
             $('#project_city_id').combobox('select', data.city.id);
             $('#project_select_coordinate').textbox('setText', [data.lng, data.lat].join(','));
-            setValues('project_select_', ['constructor', 'builder', 'user'], data);
+            setValues('project_select_', ['constructor', 'builder', 'inspector'], data);
             $('#project_scheme_list_dg').datagrid("reload",'<c:url value="/inspect/scheme/queryByProjectId?id="/>'+data.id);
 
         }
@@ -445,7 +450,9 @@
         }
 
         function showScheme(data) {
-            $('#project_scheme_dept').textbox('setText', data.dept ? data.dept.name : '');
+            <sec:authentication property="principal.dept.name" var="dept_name"/>
+            var dept_name = '${dept_name}';
+            $('#project_scheme_dept').textbox('setText', dept_name);
             $('#inspectItem_id').combobox('setValue', data.inspectItem ? data.inspectItem.id : null);
             setFileField('approval_file');
             setFileField('inspect_file');
@@ -488,7 +495,7 @@
             if ($.isNumeric(plan.end_time)) {
                 plan.end_time = new Date(plan.end_time);
             }
-            setValues('project_scheme_plan_', ['assistantUser', 'user', 'majorUser', 'equipment'], plan);
+            setValues('project_scheme_plan_', ['assistantInspector', 'inspector', 'majorInspector', 'equipment','inspectMethod'], plan,'realName');
             $('#project_scheme_plan_equipment_code').textbox('setValue', plan.equipment.code);
         }
 
@@ -543,12 +550,12 @@
             });
         }
 
-        function setValues(prefix, keys, data) {
+        function setValues(prefix, keys, data,alias) {
             $.each(keys, function (i, key) {
                 if (data[key]) {
                     var $input = $(['#', prefix, key].join(''));
                     $input.textbox('setValue', data[key].id)
-                    $input.textbox('setText', data[key].name);
+                    $input.textbox('setText', data[key].name||data[key][alias]);
                 }
             });
         }

@@ -7,10 +7,9 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="b_file")
-public class File {
+public class File extends BaseModel{
     private String uuid;
     private String name;
-    private Integer dept_id;
 
     public File() {
     }
@@ -18,7 +17,6 @@ public class File {
     public File(String uuid, String name) {
         this.uuid = uuid;
         this.name = name;
-        this.dept_id = dept_id;
     }
 
     @Id
@@ -39,13 +37,5 @@ public class File {
     public void setName(String name) {
         this.name = name;
     }
-    @Basic
-    @Column(name = "dept_id")
-    public Integer getDept_id() {
-        return dept_id;
-    }
 
-    public void setDept_id(Integer dept_id) {
-        this.dept_id = dept_id;
-    }
 }

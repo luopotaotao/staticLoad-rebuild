@@ -1,5 +1,8 @@
 package com.tt.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -54,6 +57,8 @@ public class Equipment  extends BaseModel{
 
   @Basic
   @Column(name = "expired_date")
+  @DateTimeFormat(pattern="yyyy-MM-dd")
+  @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
   public Date getExpiredDate() {
     return expiredDate;
   }

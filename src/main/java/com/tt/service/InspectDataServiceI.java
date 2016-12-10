@@ -19,4 +19,6 @@ public interface InspectDataServiceI {
     List<Map<String, Object>> loadLinkedKeys(Integer plan_id);
     int linkData(Integer plan_id, List<Map<String, Object>> data);
     InspectData loadLatestData(String PRG, String STZH);
+    Map<Integer, Double> getMaxLoad(List<Integer> plan_ids);
+    Map<Integer, Double> getMaxOffset(List<Integer> plan_ids);
 }

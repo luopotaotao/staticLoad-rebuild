@@ -294,7 +294,7 @@
 
 
     <%--function manageTUsers(id) {--%>
-        <%--var href = '../basic/user/index/' + id;--%>
+        <%--var href = '../basic/inspector/index/' + id;--%>
         <%--openDialog('账号管理', href);--%>
     <%--}--%>
     <%--var r = $.getResumble({--%>

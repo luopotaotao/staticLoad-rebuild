@@ -13,8 +13,8 @@
 </head>
 <body>
 <ul>
-    <c:forEach items="${users}" var="user">
-        <li>${user.id}|${user.username}|${user.gender}</li>
+    <c:forEach items="${users}" var="inspector">
+        <li>${inspector.id}|${inspector.username}|${inspector.gender}</li>
     </c:forEach>
 </ul>
 </body>

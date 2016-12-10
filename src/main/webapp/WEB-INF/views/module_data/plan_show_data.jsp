@@ -187,9 +187,12 @@
                 }, 'json');
             }
             function exportData(prg,stzh) {
-                alert("待完成导出!");
+                window.location.href = '<c:url value="/inspect/data/download/"/>' + prg + '/' + stzh;
             }
             function initChart0(data) {
+                if(!data||!$.isPlainObject(data)){
+                    return;
+                }
                 var tick = data.tick;
                 var tickPositions = $.map(tick, function (val, key) {
                     return key;
@@ -258,7 +261,9 @@
             }
 
             function initChart1(data) {
-
+                if(!data||!$.isPlainObject(data)){
+                    return;
+                }
                 var tick = data.tick;
                 var tickPositions = $.map(tick, function (val, key) {
                     return key;
@@ -355,6 +360,9 @@
             }
 
             function initChart2(data) {
+                if(!data||!$.isPlainObject(data)){
+                    return;
+                }
                 var tick = data.tick;
                 var tickPositions = $.map(tick, function (val, key) {
                     return key;

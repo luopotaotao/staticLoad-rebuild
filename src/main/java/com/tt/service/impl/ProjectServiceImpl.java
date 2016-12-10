@@ -27,10 +27,7 @@ import java.util.stream.Collectors;
 public class ProjectServiceImpl implements ProjectServiceI {
     @Autowired
     private ProjectDaoI projectDao;
-    @Autowired
-    private AreaObjDaoI areaObjDao;
-    @Autowired
-    private CompanyDaoI companyDao;
+
     @Override
     public Project get(Serializable id) {
         return projectDao.getById(id);
@@ -93,15 +90,12 @@ public class ProjectServiceImpl implements ProjectServiceI {
 
     @Override
     public Project add(Project project) {
-        resetProjectComponents(project);
-//        project.setDept_id(dept_id);
         projectDao.save(project);
         return project;
     }
 
     @Override
     public Project update(Project project) {
-        resetProjectComponents(project);
         projectDao.update(project);
         return project;
     }
@@ -114,29 +108,6 @@ public class ProjectServiceImpl implements ProjectServiceI {
         return projectDao.executeHql("delete from Project where id in (:ids)", params);
     }
 
-    private void resetProjectComponents(Project project){
-        AreaObj province = project.getProvince();
-        AreaObj city = project.getCity();
-        Company builder = project.getBuilder();
-        Company constructor = project.getConstructor();
-        Company user = project.getUser();
-
-        if(province!=null&&province.getId()>0){
-            project.setProvince(areaObjDao.get(province.getId()));
-        }
-        if(city!=null&&city.getId()>0){
-            project.setCity(areaObjDao.get(city.getId()));
-        }
-        if(builder!=null&&builder.getId()>0){
-            project.setBuilder(companyDao.get(builder.getId()));
-        }
-        if(constructor!=null&&constructor.getId()>0){
-            project.setConstructor(companyDao.get(constructor.getId()));
-        }
-        if(user!=null&&user.getId()>0){
-            project.setUser(companyDao.get(user.getId()));
-        }
-    }
 
     @Override
     public List<String> listStzh(String prg) {

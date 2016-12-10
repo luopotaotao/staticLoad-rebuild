@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <div style="width:100%">
 
     <div class="easyui-panel" style="width:30%">
@@ -11,7 +11,7 @@
 
     <table id="dg_user" style="width:100%"></table>
     <div id="dlg_user_edit" class="easyui-dialog" style="width:100%;max-width:400px;padding:30px 60px;"
-            data-options="
+         data-options="
             //title: '添加人员',
             closed: true,
             modal: true,
@@ -27,12 +27,17 @@
             handler: $.closeUserEditDialog
             }]
         ">
-        <form id="ff_user" class="easyui-form" method="post" data-options="novalidate:true" action="<c:url value="/basic/user/post"/>">
+        <form id="ff_user" class="easyui-form" method="post" data-options="novalidate:true"
+              action="<c:url value="/basic/inspector/post"/>">
             <div style="margin-bottom:20px;display: none">
-                <input class="easyui-textbox" name="id" style="width:100%" data-options="label:'企业编号:',required:true">
+                <input class="easyui-textbox" name="id" style="width:100%" data-options="label:'用户编号:',required:true">
             </div>
             <div style="margin-bottom:20px">
-                <input class="easyui-textbox" name="name" style="width:100%"
+                <input class="easyui-textbox" name="username" style="width:100%"
+                       data-options="label:'账号:',required:true">
+            </div>
+            <div style="margin-bottom:20px">
+                <input class="easyui-textbox" name="realName" style="width:100%"
                        data-options="label:'姓名:',required:true">
             </div>
             <div style="margin-bottom:20px">
@@ -40,16 +45,16 @@
                        data-options="label:'Email:',required:true">
             </div>
             <div style="margin-bottom:20px">
-                <input class="easyui-textbox" name="pwd" style="width:100%"
+                <input class="easyui-textbox" name="password" style="width:100%"
                        data-options="label:'密码:',required:true">
             </div>
 
             <div style="margin-bottom:20px">
                 <select class="easyui-combobox" data-options="editable:false" name="role"
                         label="角色:" style="width:100%">
-                    <c:if test="${sessionScope.sessionInfo.role eq 0}">
+                    <sec:authorize access="hasRole('SUPER')">
                         <option value="1">管理员</option>
-                    </c:if>
+                    </sec:authorize>
                     <option value="2">普通用户</option>
                 </select>
             </div>
@@ -59,7 +64,7 @@
         $(function () {
             var dept_id = '${dept_id}';
             $('#dg_user').datagrid({
-                url: '<c:url value="/basic/user/${dept_id}/query"/>',
+                url: '<c:url value="/basic/inspector/queryAll"/>',
                 method: 'get',
 //                title: '人员管理',
 //                iconCls: 'icon-save',
@@ -114,11 +119,14 @@
                 columns: [[
                     {field: 'ck', checkbox: true},
                     {field: 'id', title: 'ID', hidden: true},
-                    {field: 'name', title: '姓名'},
+                    {field: 'username', title: '账号'},
+                    {field: 'realName', title: '姓名'},
 //                    {field: 'password', title: '密码'},
-                    {field: 'role', title: '角色',formatter:function (val,row) {
-                        return ['超级管理员','管理员','普通用户'][val||2];
-                    }},
+                    {
+                        field: 'role', title: '角色', formatter: function (val, row) {
+                        return ['超级管理员', '管理员', '普通用户'][val || 2];
+                    }
+                    },
                     {field: 'note', title: '备注'}
                 ]]
             });
@@ -128,9 +136,9 @@
                 var $ff = $('#ff_user');
                 if (data) {
                     $ff.form('load', data);
-                    $ff.form({url: '<c:url value="/basic/user/put"/>'});
+                    $ff.form({url: '<c:url value="/basic/inspector/put"/>'});
                 } else {
-                    $ff.form({url: '<c:url value="/basic/user/post"/>'});
+                    $ff.form({url: '<c:url value="/basic/inspector/post"/>'});
                 }
                 $('#user_dept_id').textbox('setValue', dept_id);
                 $('#dlg_user_edit').dialog('open');
@@ -168,11 +176,12 @@
                 $('#ff_user').form('clear');
                 $('#dlg_user_edit').dialog('close');
             }
+
             $.submitUserForm = submitForm;
             $.closeUserEditDialog = closeEditDialog;
             function remove(ids) {
                 $.ajax({
-                    url: '<c:url value="/basic/user/delete"/>',
+                    url: '<c:url value="/basic/inspector/delete"/>',
                     data: {ids: ids},
                     type: 'post',
                     dataType: 'json'

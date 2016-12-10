@@ -37,10 +37,9 @@ public class EquipmentController extends BaseController<Equipment> {
         return equipmentService.get(id);
     }
 
-    @RequestMapping(value = "{dept_id}/query",method = RequestMethod.GET)
+    @RequestMapping(value = "query",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject list(@PathVariable Integer dept_id,
-                           @RequestParam(required = false) String name) {
+    public JSONObject list(@RequestParam(required = false) String name) {
         name = UrlStringDecoder.decode(name);
         Map<String,Object> params = createHashMap();
         if (name!=null) {

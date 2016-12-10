@@ -10,16 +10,17 @@
 //import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 //import org.springframework.transaction.annotation.Transactional;
 //
+//import static org.junit.Assert.*;
+//
 ///**
-// * Created by tt on 2016/12/6.
+// * Created by tt on 2016/12/10.
 // */
 //@RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration(classes = {RootConfig.class, DataBaseConfig.class})
 //@Transactional
-//public class MyUserRepositoryTest {
-//
+//public class TestMyUserRepositoryTest {
 //    @Autowired
-//    private TestMyUserRepository myUserRepository;
+//    TestMyUserRepository myUserRepository;
 //    @Test
 //    public void loadUserByUsername() throws Exception {
 //        MyUserDetails userDetails = myUserRepository.loadUserByUsername("root");

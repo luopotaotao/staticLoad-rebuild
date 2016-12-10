@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
-  User: tt
+  Inspector: tt
   Date: 2016/10/12
   Time: 21:26
   To change this template use File | Settings | File Templates.
@@ -24,7 +24,7 @@
                    data-options="label:'工程id:',labelAlign:'right',required:true,editable:false">
         </div>
         <div style="margin-bottom:20px">
-            <input class="easyui-textbox select-user" name="user.id" style="width:45%"
+            <input class="easyui-textbox select-inspector" name="inspector.id" style="width:45%"
                    data-options="label:'检测负责人:',labelAlign:'right',required:true,editable:false,buttonText:'选择',
                    buttonIcon:'icon-search'">
             <input class="easyui-textbox select-equipment" name="equipment.id" style="width:45%"
@@ -38,22 +38,24 @@
                    data-options="label:'结束日期:',labelAlign:'right',required:true,editable:false">
         </div>
         <div style="margin-bottom:20px">
-            <input class="easyui-textbox select-user" name="majorUser.id" style="width:45%"
+            <input class="easyui-textbox select-inspector" name="majorInspector.id" style="width:45%"
                    data-options="label:'主检人:',labelAlign:'right',required:true,editable:false,buttonText:'选择',
                    buttonIcon:'icon-search'">
-            <input class="easyui-textbox select-user" name="assistantUser.id" style="width:45%"
+            <input class="easyui-textbox select-inspector" name="assistantInspector.id" style="width:45%"
                    data-options="label:'副检人:',labelAlign:'right',required:true,editable:false,buttonText:'选择',
                    buttonIcon:'icon-search'">
         </div>
         <div style="margin-bottom:20px">
             <div style="margin-bottom:20px">
-                <select id="inspect_method" class="easyui-combobox" name="inspectMethods.id" style="width:45%"
+                <select id="inspect_method" class="easyui-combobox" name="inspectMethod.id" style="width:45%"
                         data-options="label:'检测项目:',
             labelAlign:'right',
             url:'<c:url value="/basic/inspectMethod/${inspectItemId}/comboList"/> ',
             method:'get',
             valueField: 'id',
-            textField: 'name'
+            textField: 'name',
+            multiple:false,
+            editable:false
             ">
                 </select>
             </div>
@@ -67,7 +69,7 @@
             onClickButton: function () {
                 var _this = this;
                 var dept_id = $('#project_add_plan_dept_id').val();
-                var  url="<c:url value="/inspect/plan/selectEquipment/"/>"+dept_id;
+                var  url="<c:url value="/inspect/plan/selectEquipment/"/>";
                 selectChild(url, function (data) {
                     var names = [];
                     var ids = [];
@@ -80,17 +82,16 @@
                 });
             }
         });
-        $('input.select-user').textbox({
+        $('input.select-inspector').textbox({
             onClickButton: function () {
                 var _this = this;
-                var dept_id = $('#project_add_plan_dept_id').val();
-                var  url="<c:url value="/inspect/plan/selectUser/"/>"+dept_id;
+                var  url="<c:url value="/inspect/plan/selectUser"/>";
                 selectChild(url, function (data) {
                     var names = [];
                     var ids = [];
                     $.each(data, function (i, item) {
                         ids.push(item.id);
-                        names.push(item.name);
+                        names.push(item.realName);
                     });
                     $(_this).textbox('setValue', ids);
                     $(_this).textbox('setText', names);

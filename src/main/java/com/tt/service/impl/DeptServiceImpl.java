@@ -49,7 +49,7 @@ public class DeptServiceImpl implements DeptServiceI {
         StringBuilder hql = new StringBuilder("select count(*) from Dept WHERE 1=1 ");
 //
         Byte typ = (Byte) params.get("typ");
-        Byte name = (Byte) params.get("name");
+        String name = (String) params.get("name");
         if(typ!=null&&typ!=0){
             hql.append(" AND typ=:typ ");
         }

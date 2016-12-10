@@ -41,23 +41,18 @@
             </div>
             <div style="margin-bottom:20px">
                 <input class="easyui-datebox" name="expiredDate" style="width:100%"
-                       data-options="label:'有效日期:'">
+                       data-options="label:'有效日期:',editable:false">
             </div>
             <div style="margin-bottom:20px">
                 <input class="easyui-textbox" name="note" style="width:100%"
                        data-options="label:'备注:',multiline:true,height:120">
             </div>
-            <div style="margin-bottom:20px;display: none;">
-                <input id="equipment_dept_id" class="easyui-textbox" name="dept_id" style="width:100%"
-                       data-options="label:'所属机构id:',required:true">
-            </div>
         </form>
     </div>
     <script type="text/javascript">
         $(function () {
-            var dept_id = '${dept_id}';
             $('#dg_equipment').datagrid({
-                url: '<c:url value="/basic/equipment/${dept_id}/query"/>',
+                url: '<c:url value="/basic/equipment/query"/>',
                 method: 'get',
 //                title: '设备管理',
 //                iconCls: 'icon-save',
@@ -186,7 +181,7 @@
                 } else {
                     $ff.form({url: '<c:url value="/basic/equipment/post"/>'});
                 }
-                $('#equipment_dept_id').textbox('setValue', dept_id);
+//                $('#equipment_dept_id').textbox('setValue', dept_id);
                 $('#dlg_equipment_edit').dialog('open');
             }
 

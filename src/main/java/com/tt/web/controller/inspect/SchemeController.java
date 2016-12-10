@@ -1,6 +1,7 @@
 package com.tt.web.controller.inspect;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tt.model.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -76,6 +77,18 @@ public class SchemeController extends BaseController<InspectScheme> {
     @RequestMapping(value = "post")
     @ResponseBody
     public JSONObject add(@ModelAttribute InspectScheme scheme) {
+        File approval_file = scheme.getApproval_file();
+        File inspect_file = scheme.getInspect_file();
+        if(approval_file!=null){
+            if(approval_file.getUuid()==null||approval_file.getUuid().trim().isEmpty()){
+                scheme.setApproval_file(null);
+            }
+        }
+         if(inspect_file!=null){
+            if(inspect_file.getUuid()==null||inspect_file.getUuid().trim().isEmpty()){
+                scheme.setInspect_file(null);
+            }
+        }
         inspectSchemeService.add(scheme);
         return flagResponse(scheme.getId()>0);
     }

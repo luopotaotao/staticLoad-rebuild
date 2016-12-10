@@ -61,7 +61,7 @@
                    data-options="label:'施工单位:',labelAlign:'right',required:true,editable:false,buttonText:'选择',
                    buttonIcon:'icon-search'" url="<c:url value="/basic/company/partial?typ=2"/>">
 
-            <input id="project_add_project_select_user" class="easyui-textbox select" name="user.id" style="width:45%"
+            <input id="project_add_project_select_user" class="easyui-textbox select" name="inspector.id" style="width:45%"
                    data-options="label:'监理单位:',labelAlign:'right',required:true,editable:false,buttonText:'选择',
                    buttonIcon:'icon-search'" url="<c:url value="/basic/company/partial?typ=3"/>">
         </div>
