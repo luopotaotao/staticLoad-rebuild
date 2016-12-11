@@ -40,8 +40,8 @@ public class ManageController extends BaseController<Project> {
     @ResponseBody
     public JSONObject list(@RequestParam(required = false) Integer area_id,
                            @RequestParam(required = false) String name,
-                           @RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
-                           @RequestParam(value = "rows",required = false,defaultValue = "10") Integer pageSize) {
+                           @RequestParam(value = "page",required = false) Integer page,
+                           @RequestParam(value = "rows",required = false) Integer pageSize) {
         Map<String,Object> params = new HashMap<>();
         if(name!=null&&!name.trim().isEmpty()){
             name = decodeStr(name);
@@ -61,7 +61,7 @@ public class ManageController extends BaseController<Project> {
     @RequestMapping(value = "tree",method = RequestMethod.GET)
     @ResponseBody
     public List<Project> list() {
-        List<Project> list = projectService.listByAreaId(null);//TODO 此处需要处理
+        List<Project> list = projectService.list(null);//TODO 此处需要处理
         return list;
     }
 

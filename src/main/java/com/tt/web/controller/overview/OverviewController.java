@@ -1,6 +1,8 @@
 package com.tt.web.controller.overview;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.tt.service.OverViewProjectServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.tt.web.controller.BaseController;
 import com.tt.model.Overview;
-import com.tt.model.Project;
+import com.tt.model.OverViewProject;
 import com.tt.service.OverviewServiceI;
 import com.tt.service.ProjectServiceI;
 
@@ -26,27 +28,28 @@ public class OverviewController extends BaseController<Overview>{
     @Autowired
     private OverviewServiceI overviewServiceI;
     @Autowired
-    private ProjectServiceI projectServiceI;
+    private OverViewProjectServiceI overViewProjectService;
 
     @RequestMapping("index")
     public String index(Model model, @RequestParam(value = "project_id",required = false) Integer id) {
-        Project selectedProject = null;
+        OverViewProject selectedProject = null;
         if(id!=null&&id>0){
-            selectedProject = projectServiceI.get(id);
+            selectedProject = overViewProjectService.get(id);
         }
 
         if(selectedProject!=null){
-            JSONObject project = new JSONObject();
-            project.put("name",selectedProject.getName());
-            project.put("code",selectedProject.getCode());
-            JSONObject city = new JSONObject();
-            city.put("text",selectedProject.getCity().getText());
-            project.put("city",city);
-            project.put("id",selectedProject.getId());
-            project.put("lat",selectedProject.getLat());
-            project.put("lng",selectedProject.getLng());
+//            JSONObject project = new JSONObject();
+//            project.put("name",selectedProject.getName());
+//            project.put("code",selectedProject.getCode());
+//            JSONObject city = new JSONObject();
+//            city.put("text",selectedProject.getCity().getText());
+//            project.put("city",city);
+//            project.put("id",selectedProject.getId());
+//            project.put("lat",selectedProject.getLat());
+//            project.put("lng",selectedProject.getLng());
 
-            model.addAttribute("selectedProject",project);
+
+            model.addAttribute("selectedProject",JSONObject.toJSON(selectedProject));
         }else{
             model.addAttribute("selectedProject","null");
         }
@@ -59,12 +62,20 @@ public class OverviewController extends BaseController<Overview>{
      * @param area_id
      * @return 工程信息列表
      */
-    @RequestMapping("{area_id}/queryProjects")
+    @RequestMapping("queryProjectsByAreaId/{area_id}")
     @ResponseBody
-    public List<Project> queryProjects(@PathVariable Integer area_id) {
-        List<Project> projects = projectServiceI.listByAreaId(area_id);
+    public List<OverViewProject> queryProjectsByArea(@PathVariable(required = false) Integer area_id) {
+        List<OverViewProject> projects = overViewProjectService.listByAreaId(area_id);
         return projects;
     }
+    @RequestMapping("queryProjects")
+    @ResponseBody
+    @JsonIgnoreProperties(value = {"constructor","builder","inspector","children"})
+    public List<OverViewProject> queryProjects() {
+        List<OverViewProject> projects = overViewProjectService.list();
+        return projects;
+    }
+
 
     /**
      * 查询行政区划树,以及每个行政区划下的工程总数

@@ -1,6 +1,8 @@
 package com.tt.dao.impl;
 
 import com.tt.dao.BaseDaoI;
+import com.tt.ext.security.MyUserDetails;
+import com.tt.util.SessionUtil;
 import org.springframework.stereotype.Repository;
 import com.tt.dao.OverviewDaoI;
 import com.tt.dao.impl.BaseDaoImpl;
@@ -28,7 +30,6 @@ public class OverviewDaoImpl extends BaseDaoImpl<Overview> implements OverviewDa
     @Override
     public List<Overview> queryAll() {
         Map params = new HashMap();
-
         List<Overview> ret = find("from Overview where level=0 and dept_id=:dept_id",params);
         return ret;
     }

@@ -100,23 +100,26 @@ public class DataController extends BaseController<InspectData> {
                 , "挠度数据"};
 
         List<Object[]> data = new LinkedList<>();
-        list.forEach(item->{
-            data.add(new Object[]{
-                    item.getDevnb(),
-                    item.getPrs_str(),
-                    item.getAvgPrs(),
-                    item.getHzjc_str(),
-                    item.getAvgHzjc(),
-                    item.getWyjc_str(),
-                    item.getAvgWyjc(),
-                    item.getLat() + "," + item.getLng(),
-                    item.getDevstr(),
-                    item.getTime(),
-                    item.getInterval(),
-                    item.getQjx_str(),
-                    item.getNdsj_str()
+        if(list!=null&&!list.isEmpty()){
+            list.forEach(item->{
+                data.add(new Object[]{
+                        item.getDevnb(),
+                        item.getPrs_str(),
+                        item.getAvgPrs(),
+                        item.getHzjc_str(),
+                        item.getAvgHzjc(),
+                        item.getWyjc_str(),
+                        item.getAvgWyjc(),
+                        item.getLat() + "," + item.getLng(),
+                        item.getDevstr(),
+                        item.getTime(),
+                        item.getInterval(),
+                        item.getQjx_str(),
+                        item.getNdsj_str()
+                });
             });
-        });
+        }
+
         return new ExcelSheet(name, Arrays.asList(columns), data);
     }
 

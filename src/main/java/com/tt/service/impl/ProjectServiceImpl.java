@@ -1,6 +1,10 @@
 package com.tt.service.impl;
 
+import com.tt.ext.security.MyUserDetails;
+import com.tt.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.tt.dao.AreaObjDaoI;
 import com.tt.dao.CompanyDaoI;
@@ -47,21 +51,15 @@ public class ProjectServiceImpl implements ProjectServiceI {
             params.put("name", "%" + name + "%");
             hql.append(" AND (name like :name or code like :name) ");
         }
+
         List<Project> ret = projectDao.find(hql.toString(), params, page, pageSize);
 
         return ret;
     }
-
     @Override
-    public List<Project> listByAreaId(Integer area_id) {
-        StringBuilder hql = new StringBuilder("from Project WHERE dept_id=:dept_id");
-        Map<String, Object> params = new HashMap<>();
-
-        if (area_id != null && area_id != 0) {
-            params.put("area_id", area_id);
-            hql.append(" AND (province_id=:area_id or city_id=:area_id)");
-        }
-        List<Project> list = projectDao.find(hql.toString(),params);
+    public List<Project> list(Map<String, Object> params) {
+        String hql = "from Project WHERE dept_id=:dept_id";
+        List<Project> list = projectDao.find(hql);
         if(list!=null&&!list.isEmpty()){
             List<Integer> ids = list.stream().map(p->p.getId()).collect(Collectors.toList());
             Map<Integer,Integer> statusMap = listStatus(ids);

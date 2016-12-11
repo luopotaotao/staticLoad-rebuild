@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,13 +13,19 @@
 
 </head>
 <body class="easyui-layout">
-<div data-options="region:'west',split:true" title="工程分布" style="width: 200px; overflow: hidden;">
-    <div class="easyui-panel" style="padding:5px">
-        <ul id="tree_menu"></ul>
-    </div>
+
+<div data-options="region:'west',split:true"
+        <sec:authorize access="hasRole('CUSTOM')">
+             title="工程列表" style="width: 20%; overflow: hidden;"
+        </sec:authorize>
+        <sec:authorize access="hasAnyRole('SUPER','ADMIN')">
+             title="工程分布" style="width: 12%; overflow: hidden;"
+        </sec:authorize>
+>
+    <table id="tree_menu"></table>
 </div>
-<div id="tt" class="easyui-panel" data-options="region:'center'">
-    <div id="div_map" style="width: 800px;height: 500px"></div>
+<div id="tt" class="easyui-panel" data-options="region:'center'" style="height: 100%">
+    <div id="div_map" style="width: 100%;height: 100%"></div>
 </div>
 
 <script>
@@ -30,57 +37,66 @@
             "url": '<c:url value="/project/manage/index"/>'
         }];
 
-        initUI();
-        function initUI() {
-            $('#tree_menu').tree({
-                url: '<c:url value="/overview/main/queryAll"/>',
+        initTree();
+        <sec:authorize access="hasRole('CUSTOM')">
+        function initTree() {
+            $('#tree_menu').treegrid({
+                animate:true,
+                collapsible:true,
+                fitColumns:true,
+                url:'<c:url value="/overview/main/queryProjects"/>',
                 method: 'get',
-                textField: 'name',
-                animate: true,
-                onClick: function (node) {
-                    //0,1,2  -> 4 7 11
-                    debugger;
-                    centerAndZoom(node.text,[5,7,10][node.level]);
+                idField:'id',
+                treeField:'text',
+                showFooter:true,
+                columns:[[
+                    {title:'工程名称',field:'text',align:'center'},
+                    {title:'工程编码',field:'code',align:'center'},
+                    {title:'所在城市',field:'province',align:'center',formatter:function (p,row) {
+                        return p.text+row['city'].text;
+                    }}
+                ]],
+                onClickRow:function (row) {
+                    centerAndZoom(row.city.text, 10);
                     removeAllOverlays();
-                    if (node.count) {
-                        getProjectsAndShow(node.id);
-                    }
-                },
-                formatter: function (node) {
-                    if ($.isNumeric(node.count)) {
-                        var str_arr = [node.text, ' (', node.count, ')'];
-                        return str_arr.join('');
-                    } else {
-                        return node.text;
-                    }
-
+                    showMarkers([row], onClickMarker);
                 }
             });
-
         }
 
+        </sec:authorize>
+        <sec:authorize access="hasAnyRole('SUPER','ADMIN')">
+        function initTree() {
+            $('#tree_menu').treegrid({
+                animate:true,
+                collapsible:true,
+                fitColumns:true,
+                url:'<c:url value="/overview/main/queryAll"/>',
+                method: 'get',
+                idField:'id',
+                treeField:'text',
+                showFooter:true,
+                columns:[[
+                    {title:'区域',field:'text'},
+                    {field:'count',title:'数量',align:'center'}
+                ]],
+                onClickRow:function (row) {
+                    centerAndZoom(row.text, [5, 7, 10][row.level]);
+                    removeAllOverlays();
+                    if (row.count) {
+                        getProjectsAndShow(row.id);
+                    }
+                }
+            });
+        }
         function getProjectsAndShow(area_id) {
-            var url = '<c:url value="/overview/main/"/>' + area_id + '/queryProjects';
+            var url = '<c:url value="/overview/main/queryProjectsByAreaId/"/>' + area_id;
             $.getJSON(url, function (ret) {
-                showMarkers(ret, function (marker) {
-                    var template_arr = [
-                        '<p>工程名称:{name}</p>',
-                        '<p>工程编码:{code}</p>',
-                        '<p>地址:{city}{address}</p>',
-                        '<div><button onclick="top.openModule(\'<c:url value="/project/manage/index"/>?project_id={id}\')"> 工程详情</button> </div>'];
-                    var info = marker.info;
-                    map.centerAndZoom(marker.M, 11);
-                    showInfo(marker.M, template_arr.join(''), {
-                        id: info.id || '',
-                        name: info.name || '',
-                        code: info.code || '',
-                        city: info.city ? (info.city.text || '') : '',
-                        address: info.address || ''
-                    });
-                });
+                showMarkers(ret, onClickMarker);
             });
         }
 
+        </sec:authorize>
         var map = initializeMap();
         $.extend({
             Map: {
@@ -95,25 +111,10 @@
             }
 
         });
-//        var points = [new BMap.Point(113.272,23.134),
-//
-//            new BMap.Point(113.299,23.124),
-//            new BMap.Point(113.251,23.130),
-//            new BMap.Point(113.323,23.089),
-//            new BMap.Point(113.317,23.128),
-//            new BMap.Point(113.232,23.095)];
-//
-//        var markers = points.map(function(p){return {point:p};});
-//
-//        $.Map.showMarkers(markers);
+
         function initializeMap() {
-            var $div = $('#div_map');
-            $div.height($(document).height() * 0.92);
-            $div.width($(document).width() * 0.85);
             var map = new BMap.Map("div_map");
-//            var point = new BMap.Point(113.276, 23.117);
             map.centerAndZoom("全国", 5);
-//            map.centerAndZoom(point, 12);                 // 初始化地图，设置中心点坐标和地图级别
             map.enableScrollWheelZoom(); //启用滚轮放大缩小，默认禁用
             map.enableContinuousZoom(); //启用地图惯性拖拽，默认禁用
             var controls = [
@@ -141,9 +142,10 @@
             map.centerAndZoom("西安", 4);
         }
 
-        function centerAndZoom(city,level) {
+        function centerAndZoom(city, level) {
             map.centerAndZoom(city, level);
         }
+
         //显示markers,挂载点击事件,同时设置地图显示范围
         function showMarkers(markers, callback) {
             if ($.isArray(markers)) {
@@ -174,7 +176,22 @@
                 });
             }
         }
-
+        function onClickMarker(marker) {
+            var template_arr = [
+                '<p>工程名称:{name}</p>',
+                '<p>工程编码:{code}</p>',
+                '<p>地址:{city}{address}</p>',
+                '<div><button onclick="top.openModule(\'<c:url value="/project/manage/index"/>?project_id={id}\')"> 工程详情</button> </div>'];
+            var info = marker.info;
+            map.centerAndZoom(marker.M, 11);
+            showInfo(marker.M, template_arr.join(''), {
+                id: info.id || '',
+                name: info.name || '',
+                code: info.code || '',
+                city: info.city ? (info.city.text || '') : '',
+                address: info.address || ''
+            });
+        }
         /**
          * 显示信息窗口
          * @param point 信息窗口点坐标,例如 point = new BMap.Point(116.417854,39.921988)
