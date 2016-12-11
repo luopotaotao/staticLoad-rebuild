@@ -2,8 +2,12 @@ package com.tt.model;
 
 
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "b_project")
@@ -21,7 +25,7 @@ public class Project extends BaseModel {
     private Company inspector;
     private String note;
     private Integer status;
-    private List<InspectScheme> children;
+    private Set<InspectScheme> children;
 
     @Id
     @GeneratedValue
@@ -146,12 +150,12 @@ public class Project extends BaseModel {
     }
 
     @OneToMany(mappedBy = "project")
-//    @OrderColumn(name = "id")
-    public List<InspectScheme> getChildren() {
+    @OrderBy(value="id asc ")
+    public Set<InspectScheme> getChildren() {
         return children;
     }
 
-    public void setChildren(List<InspectScheme> children) {
+    public void setChildren(Set<InspectScheme> children) {
         this.children = children;
     }
 

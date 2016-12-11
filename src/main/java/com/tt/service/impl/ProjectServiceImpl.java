@@ -39,7 +39,7 @@ public class ProjectServiceImpl implements ProjectServiceI {
 
 
     @Override
-    public List<Project> list(Map<String,Object> params, Integer page, Integer pageSize) {
+    public List<Project> list(Map<String, Object> params, Integer page, Integer pageSize) {
 
         Integer area_id = (Integer) params.get("area_id");
         String name = (String) params.get("name");
@@ -56,33 +56,48 @@ public class ProjectServiceImpl implements ProjectServiceI {
 
         return ret;
     }
+
     @Override
     public List<Project> list(Map<String, Object> params) {
-        String hql = "from Project WHERE dept_id=:dept_id";
-        List<Project> list = projectDao.find(hql);
-        if(list!=null&&!list.isEmpty()){
-            List<Integer> ids = list.stream().map(p->p.getId()).collect(Collectors.toList());
-            Map<Integer,Integer> statusMap = listStatus(ids);
-            list.stream().forEach(item->item.setStatus(statusMap.get(item.getId())));
+        List<Project> list;
+
+        StringBuilder hql = new StringBuilder("select distinct p from Project p join fetch p.children s join fetch s.children plan WHERE p.dept_id=:dept_id");
+        if (SessionUtil.hasRole("ROLE_CUSTOM")) {
+            params = new HashMap<>();
+            params.put("userId", SessionUtil.getUser().getId());
+            hql.append(" and (plan.inspector.id=:userId or plan.majorInspector.id=:userId or plan.assistantInspector.id=:userId)");
+            list = projectDao.find(hql.toString(), params);
+        } else {
+            list = projectDao.find(hql.toString());
+        }
+
+        if (list != null && !list.isEmpty()) {
+            List<Integer> ids = list.stream().map(p -> p.getId()).collect(Collectors.toList());
+            Map<Integer, Integer> statusMap = listStatus(ids);
+            list.stream().forEach(item -> item.setStatus(statusMap.get(item.getId())));
         }
 
         return list;
     }
-    private Map<Integer,Integer> listStatus(List<Integer> ids){
-        Map<Integer,Integer> ret = new HashMap<>();
-        Map<String,Object> params = new HashMap<>();
-        params.put("ids",ids);
+
+    private Map<Integer, Integer> listStatus(List<Integer> ids) {
+        Map<Integer, Integer> ret = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
+        params.put("ids", ids);
         List<Object[]> list = projectDao.findBySql("SELECT p_id id,COUNT(*) started FROM \n" +
                 "(SELECT id,inspect_scheme_id FROM b_inspect_plan WHERE inspect_scheme_id in(SELECT id FROM b_inspect_scheme WHERE inspect_project_id in(:ids))) p\n" +
                 "LEFT JOIN(SELECT id,inspect_project_id p_id FROM b_inspect_scheme WHERE inspect_project_id in(:ids)) s ON p.inspect_scheme_id=s.id\n" +
-                " GROUP BY p_id;",params);
+                " GROUP BY p_id;", params);
         System.out.println(list);
-        list.stream().forEach(row->{ret.put((Integer) row[0],((BigInteger) row[1]).intValue());});
+        list.stream().forEach(row -> {
+            ret.put((Integer) row[0], ((BigInteger) row[1]).intValue());
+        });
         return ret;
     }
+
     //TODO delete?
     @Override
-    public long count(Map<String,Object> params) {
+    public long count(Map<String, Object> params) {
         return 0;
     }
 

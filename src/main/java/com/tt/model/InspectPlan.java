@@ -2,6 +2,7 @@ package com.tt.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "b_inspect_plan")
+//@Where(clause = "dept_id='#{T(SessionUtil).getUser().getDept().getId()}'")
 @JsonIgnoreProperties(value = {"dept"})
 public class InspectPlan extends BaseModel {
     private Integer id;

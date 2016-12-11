@@ -18,7 +18,9 @@
     </style>
 </head>
 <body class="easyui-layout">
-<div id="project_menu_panel" data-options="region:'west',split:true,tools: [{
+<div id="project_menu_panel" data-options="region:'west',split:true,tools: [
+<sec:authorize access="hasAnyRole('SUPER','ADMIN')">
+{
     id:'tools_add_project',
     iconCls:'icon-add',
     handler:function(){
@@ -27,7 +29,9 @@
         }catch(e){
         }
     }
-  },{
+  },
+  </sec:authorize>
+  {
     id:'tools_reload_project',
     iconCls:'icon-reload',
     handler:function(){
@@ -38,25 +42,30 @@
         <ul id="tree_menu"></ul>
     </div>
     <div id="project_mm_project" class="easyui-menu" style="width:120px;">
-        <div class="menu_item" onclick="$.project.addProject()" data-options="iconCls:'icon-add'">新建工程</div>
-        <div class="menu-sep"></div>
-        <div class="menu_item" onclick="$.project.addScheme()" data-options="iconCls:'icon-add'">添加方案</div>
-        <div class="menu_item_remove" onclick="$.project.remove()" data-options="iconCls:'icon-remove'">删除工程
-        </div>
-        <div class="menu-sep"></div>
+        <sec:authorize access="hasAnyRole('SUPER','ADMIN')">
+            <div class="menu_item" onclick="$.project.addProject()" data-options="iconCls:'icon-add'">新建工程</div>
+            <div class="menu-sep"></div>
+            <div class="menu_item" onclick="$.project.addScheme()" data-options="iconCls:'icon-add'">添加方案</div>
+            <div class="menu_item_remove" onclick="$.project.remove()" data-options="iconCls:'icon-remove'">删除工程</div>
+            <div class="menu-sep"></div>
+        </sec:authorize>
         <div class="menu_item" onclick="$.project.expandNode()">展开</div>
         <div class="menu_item" onclick="">收起</div>
     </div>
     <div id="project_mm_scheme" class="easyui-menu" style="width:120px;">
-        <div class="menu_item" onclick="$.project.addPlan()" data-options="iconCls:'icon-add'">添加计划</div>
-        <div class="menu_item_remove" onclick="$.project.remove()" data-options="iconCls:'icon-remove'">删除方案</div>
-        <div class="menu-sep"></div>
+        <sec:authorize access="hasAnyRole('SUPER','ADMIN')">
+            <div class="menu_item" onclick="$.project.addPlan()" data-options="iconCls:'icon-add'">添加计划</div>
+            <div class="menu_item_remove" onclick="$.project.remove()" data-options="iconCls:'icon-remove'">删除方案</div>
+            <div class="menu-sep"></div>
+        </sec:authorize>
         <div class="menu_item" onclick="operate('expand')">展开</div>
         <div class="menu_item" onclick="operate('collapse')">收起</div>
     </div>
     <div id="project_mm_plan" class="easyui-menu" style="width:120px;">
+        <sec:authorize access="hasAnyRole('SUPER','ADMIN')">
         <div class="menu_item_remove" onclick="$.project.linkData()" data-options="iconCls:'icon-remove'">关联数据</div>
         <div class="menu_item_remove" onclick="$.project.remove()" data-options="iconCls:'icon-remove'">删除计划</div>
+        </sec:authorize>
     </div>
 </div>
 <div id="tt" class="easyui-panel" data-options="region:'center'" style="width: 1000px;height: 500px">
@@ -160,10 +169,16 @@
                 <thead>
                 <tr>
                     <th data-options="field:'name',align:'center',width:80">方案名称</th>
-                    <th data-options="field:'basement_lev',align:'center',width:80,formatter:function(val,row){return val?['甲级','乙级','丙级'][val]:'';}">建筑等级</th>
+                    <th data-options="field:'basement_lev',align:'center',width:80,formatter:function(val,row){return val?['甲级','乙级','丙级'][val]:'';}">
+                        建筑等级
+                    </th>
                     <th data-options="field:'pile_count',align:'center',width:80">总桩数</th>
-                    <th data-options="field:'inspectItem',align:'center',width:80,formatter:function(val,row){return val?val.name:'';}">检测项目</th>
-                    <th data-options="field:'project',align:'center',width:80,formatter:function(val,row){return '<a href=\'javascript:$.project.clickNode('+val.id+','+row.id+')\'>查看</a>';}">查看</th>
+                    <th data-options="field:'inspectItem',align:'center',width:80,formatter:function(val,row){return val?val.name:'';}">
+                        检测项目
+                    </th>
+                    <th data-options="field:'project',align:'center',width:80,formatter:function(val,row){return '<a href=\'javascript:$.project.clickNode('+val.id+','+row.id+')\'>查看</a>';}">
+                        查看
+                    </th>
                 </tr>
                 </thead>
             </table>
@@ -249,13 +264,23 @@
                 <tr>
                     <th data-options="field:'name',align:'center',width:80">计划名称</th>
                     <th data-options="field:'stzh',align:'center',width:80">桩号</th>
-                    <th data-options="field:'inspector',align:'center',width:80,formatter:function(val,row){return val?val.realName:'';}">检测负责人</th>
-                    <th data-options="field:'equipment',align:'center',width:80,formatter:function(val,row){return val?val.name:'';}">设备编号</th>
-                    <th data-options="field:'start_time',align:'center',width:80,formatter:function(val,row){return $.isNumeric(val)?$.DateUtil.format(new Date(val),'yyyy-MM-dd'):'';}">开始日期</th>
-                    <th data-options="field:'end_time',align:'center',width:80,formatter:function(val,row){return $.isNumeric(val)?$.DateUtil.format(new Date(val),'yyyy-MM-dd'):'';}">结束日期</th>
+                    <th data-options="field:'inspector',align:'center',width:80,formatter:function(val,row){return val?val.realName:'';}">
+                        检测负责人
+                    </th>
+                    <th data-options="field:'equipment',align:'center',width:80,formatter:function(val,row){return val?val.name:'';}">
+                        设备编号
+                    </th>
+                    <th data-options="field:'start_time',align:'center',width:80,formatter:function(val,row){return $.isNumeric(val)?$.DateUtil.format(new Date(val),'yyyy-MM-dd'):'';}">
+                        开始日期
+                    </th>
+                    <th data-options="field:'end_time',align:'center',width:80,formatter:function(val,row){return $.isNumeric(val)?$.DateUtil.format(new Date(val),'yyyy-MM-dd'):'';}">
+                        结束日期
+                    </th>
                     <th data-options="field:'maxLoad',align:'center',width:80">最大加载值</th>
                     <th data-options="field:'maxOffset',align:'center',width:80">最大位移值</th>
-                    <th data-options="field:'project',align:'center',width:80,formatter:function(val,row){return '<a href=\'javascript:$.project.clickNode('+val.id+','+row.inspectScheme.id+','+row.id+')\'>查看</a>';}">查看</th>
+                    <th data-options="field:'project',align:'center',width:80,formatter:function(val,row){return '<a href=\'javascript:$.project.clickNode('+val.id+','+row.inspectScheme.id+','+row.id+')\'>查看</a>';}">
+                        查看
+                    </th>
                 </tr>
                 </thead>
             </table>
@@ -332,7 +357,8 @@
 
                 <div style="margin-bottom:20px">
                     <div style="margin-bottom:20px">
-                        <select id="project_scheme_plan_inspectMethod" class="easyui-combobox" name="inspectMethod" style="width:500px"
+                        <select id="project_scheme_plan_inspectMethod" class="easyui-combobox" name="inspectMethod"
+                                style="width:500px"
                                 data-options="label:'检测项目:',
             labelAlign:'right',
             method:'get',
@@ -437,7 +463,7 @@
             $('#project_city_id').combobox('select', data.city.id);
             $('#project_select_coordinate').textbox('setText', [data.lng, data.lat].join(','));
             setValues('project_select_', ['constructor', 'builder', 'inspector'], data);
-            $('#project_scheme_list_dg').datagrid("reload",'<c:url value="/inspect/scheme/queryByProjectId?id="/>'+data.id);
+            $('#project_scheme_list_dg').datagrid("reload", '<c:url value="/inspect/scheme/queryByProjectId?id="/>' + data.id);
 
         }
 
@@ -456,7 +482,7 @@
             $('#inspectItem_id').combobox('setValue', data.inspectItem ? data.inspectItem.id : null);
             setFileField('approval_file');
             setFileField('inspect_file');
-            $('#project_scheme_plan_list_dg').datagrid("reload",'<c:url value="/inspect/plan/queryBySchemeId?id="/>'+data.id);
+            $('#project_scheme_plan_list_dg').datagrid("reload", '<c:url value="/inspect/plan/queryBySchemeId?id="/>' + data.id);
             function setFileField(field) {
 
                 var file = data[field];
@@ -495,7 +521,7 @@
             if ($.isNumeric(plan.end_time)) {
                 plan.end_time = new Date(plan.end_time);
             }
-            setValues('project_scheme_plan_', ['assistantInspector', 'inspector', 'majorInspector', 'equipment','inspectMethod'], plan,'realName');
+            setValues('project_scheme_plan_', ['assistantInspector', 'inspector', 'majorInspector', 'equipment', 'inspectMethod'], plan, 'realName');
             $('#project_scheme_plan_equipment_code').textbox('setValue', plan.equipment.code);
         }
 
@@ -550,12 +576,12 @@
             });
         }
 
-        function setValues(prefix, keys, data,alias) {
+        function setValues(prefix, keys, data, alias) {
             $.each(keys, function (i, key) {
                 if (data[key]) {
                     var $input = $(['#', prefix, key].join(''));
                     $input.textbox('setValue', data[key].id)
-                    $input.textbox('setText', data[key].name||data[key][alias]);
+                    $input.textbox('setText', data[key].name || data[key][alias]);
                 }
             });
         }
@@ -663,13 +689,14 @@
 //        function getRoot() {
 //            return $tree_menu.tree('getRoot');
 //        }
-        function getRoot(node){
-            if($.isNumeric(node.level)&&node.level>0){
-                return getRoot($tree_menu.tree('getParent',node.target));
-            }else{
+        function getRoot(node) {
+            if ($.isNumeric(node.level) && node.level > 0) {
+                return getRoot($tree_menu.tree('getParent', node.target));
+            } else {
                 return node;
             }
         }
+
         function remove() {
             var node = getNode();
             var msg = ['是否确认删除:', node.text, '?'].join('');
@@ -698,43 +725,45 @@
                 }
             });
         }
-        function clickNode(projectId,schemeId,planId){
-            var prg = null,scheme = null,plan=null,node = null;
+
+        function clickNode(projectId, schemeId, planId) {
+            var prg = null, scheme = null, plan = null, node = null;
             var projects = $tree_menu.tree('getRoots');
-            if(projects.length>0){
-                for(var i=0;i<projects.length;i++){
-                    if(projects[i].id==projectId){
+            if (projects.length > 0) {
+                for (var i = 0; i < projects.length; i++) {
+                    if (projects[i].id == projectId) {
                         prg = projects[i];
                         break;
                     }
                 }
             }
             //只有工程Id的时候说明选择的是工程
-            if(schemeId==null){
+            if (schemeId == null) {
                 node = prg;
-            }else{
-                var children = $tree_menu.tree('getChildren',prg.target);
-                if(children==null||children.length<1){
+            } else {
+                var children = $tree_menu.tree('getChildren', prg.target);
+                if (children == null || children.length < 1) {
                     return;
                 }
                 //因为获取的scheme和plan节点都算在的root的children中,因此需要根据level和id来过滤到底是哪个层级哪个节点
-                var level = 1,id = schemeId;
-                if(planId!=null){
+                var level = 1, id = schemeId;
+                if (planId != null) {
                     level = 2;
                     id = planId;
                 }
-                for(var i=0;i<children.length;i++){
-                    var child=children[i];
-                    if(child.id==id&&child.level == level){
+                for (var i = 0; i < children.length; i++) {
+                    var child = children[i];
+                    if (child.id == id && child.level == level) {
                         node = child;
                         break;
                     }
                 }
             }
-            if(node!=null){
+            if (node != null) {
                 $(node.target).click();
             }
         }
+
         $.extend({
             project: {
                 addProject: addProject,
@@ -746,7 +775,7 @@
                 linkData: linkData,
                 expandNode: expandNode,
                 remove: remove,
-                clickNode:clickNode
+                clickNode: clickNode
             }
         });
     });

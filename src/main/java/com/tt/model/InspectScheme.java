@@ -1,10 +1,13 @@
 package com.tt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "b_inspect_scheme")
@@ -23,7 +26,8 @@ public class InspectScheme extends BaseModel{
     private File inspect_file;
     private InspectItem inspectItem;
     @JsonIgnoreProperties(value = {"user","majorUser","assistantUser" ,"project" })
-    private List<InspectPlan> children;
+    @Fetch(FetchMode.SUBSELECT)
+    private Set<InspectPlan> children;
 
 
     @Id
@@ -118,12 +122,12 @@ public class InspectScheme extends BaseModel{
     }
 
     @OneToMany(mappedBy = "inspectScheme",fetch = FetchType.EAGER)
-//    @OrderColumn(name = "id")
-    public List<InspectPlan> getChildren() {
+    @OrderBy(value="id asc ")
+    public Set<InspectPlan> getChildren() {
         return children;
     }
 
-    public void setChildren(List<InspectPlan> children) {
+    public void setChildren(Set<InspectPlan> children) {
         this.children = children;
     }
     @Transient

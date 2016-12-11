@@ -123,7 +123,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        System.out.println(new StandardPasswordEncoder("1234").encode("root"));
+        System.out.println(new StandardPasswordEncoder("1234").encode("666666"));
 
         return new StandardPasswordEncoder("1234");
     }
