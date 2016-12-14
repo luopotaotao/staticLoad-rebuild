@@ -1,13 +1,19 @@
 package com.tt.service.impl;
 
+import com.tt.dao.AuthorityDaoI;
 import com.tt.dao.UserDaoI;
+import com.tt.ext.security.Authority;
 import com.tt.ext.security.MyUserDetails;
+import com.tt.model.Dept;
 import com.tt.service.UserServiceI;
+import com.tt.util.SessionUtil;
+import com.tt.web.exception.PasswordNotRightException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,9 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by taotao on 2016/9/23.
@@ -30,8 +34,12 @@ public class UserServiceImpl implements UserServiceI,UserDetailsService {
     private UserDaoI userDao;
 
     @Autowired
+    private AuthorityDaoI authorityDao;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Value("${defaultPassword}")
+    private String defaultPassword;
     public MyUserDetails get(Integer id) {
         return userDao.getById(id);
     }
@@ -42,10 +50,8 @@ public class UserServiceImpl implements UserServiceI,UserDetailsService {
     }
 
     @Override
-    public List<MyUserDetails> list(Map<String,Object> params, Integer page, Integer pageSize) {
-        String name = (String) params.get("name");
-        Integer current_role = (Integer) params.get("role");
-        List<MyUserDetails> ret = userDao.list( name, null,null);
+    public List<MyUserDetails> list(Map<String,Object> params) {
+        List<MyUserDetails> ret = userDao.find(params);
         return ret;
     }
 
@@ -76,12 +82,13 @@ public class UserServiceImpl implements UserServiceI,UserDetailsService {
 
     @Override
     public MyUserDetails update(MyUserDetails MyUserDetails) {
-        MyUserDetails oldMyUserDetails = this.get(MyUserDetails.getId());
+//        MyUserDetails oldMyUserDetails = this.get(MyUserDetails.getId());
 //        Dept dept = deptService.get(dept_id);
 //        MyUserDetails.setDept(dept);
 //        oldMyUserDetails.setEmail(MyUserDetails.getEmail());
 //        oldMyUserDetails.setRole(MyUserDetails.getRole());
-        userDao.update(oldMyUserDetails);
+        MyUserDetails.setPassword(passwordEncoder.encode(MyUserDetails.getPassword()));
+        userDao.update(MyUserDetails);
         return MyUserDetails;
     }
     @Autowired
@@ -99,5 +106,25 @@ public class UserServiceImpl implements UserServiceI,UserDetailsService {
             throw new UsernameNotFoundException("系统中不存在该用户!");
         }
         return userDetails;
+    }
+
+    @Override
+    public MyUserDetails createDefault(Dept dept) {
+        MyUserDetails user = new MyUserDetails(dept.getCode(), passwordEncoder.encode(defaultPassword), dept.getName()+"管理员", null, true, true, true, true, dept,authorityDao.findByName("ROLE_ADMIN"));
+        userDao.save(user);
+        return user;
+    }
+
+    @Override
+    public boolean changePwd(Integer id, String old, String cur) {
+        old = passwordEncoder.encode(old);
+        cur = passwordEncoder.encode(cur);
+        if(SessionUtil.getUser().getPassword().equals(old)){
+            throw new PasswordNotRightException("密码不匹配!");
+        }
+        Map<String,Object> params = new HashMap<>();
+        params.put("cur",cur);
+        params.put("id",id);
+        return userDao.executeHql("update MyUserDetails u set u.password=:cur where id=:id",params)>0;
     }
 }

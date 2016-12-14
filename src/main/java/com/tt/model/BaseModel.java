@@ -12,11 +12,14 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 @Where(clause = "deleted=false")
 public class BaseModel {
-    private Integer dept_id;
-    private boolean isDeleted;
-
     @Basic
     @Column(name = "dept_id")
+    private Integer dept_id;
+    @Basic
+    @Column(name = "deleted")
+    private boolean isDeleted;
+
+
     public Integer getDept_id() {
         return dept_id;
     }
@@ -24,8 +27,7 @@ public class BaseModel {
     public void setDept_id(Integer dept_id) {
         this.dept_id = dept_id;
     }
-    @Basic
-    @Column(name = "deleted")
+
     public boolean isDeleted() {
         return isDeleted;
     }

@@ -1,10 +1,12 @@
 package com.tt.ext.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.tt.model.BaseModel;
 import com.tt.model.Dept;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -12,8 +14,8 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "my_user_details")
-@JsonIgnoreProperties(value = {"password"})
-public class MyUserDetails implements Serializable, org.springframework.security.core.userdetails.UserDetails {
+@JsonIgnoreProperties(value = {"password","authorities","dept"})
+public class MyUserDetails extends BaseModel implements Serializable, org.springframework.security.core.userdetails.UserDetails {
 
     @Id
     @GeneratedValue
@@ -26,17 +28,48 @@ public class MyUserDetails implements Serializable, org.springframework.security
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
+
+
+
     @ManyToOne
-    @JoinColumn(name = "dept_id")
+    @JoinColumn(name = "dept_id",insertable = false,updatable = false)
     private Dept dept;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "authorities",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name="role_id"))
+//    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REFRESH)
+//    @JoinTable(name = "authorities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @Transient
     private Set<Authority> authorities;
 
-    private boolean isDeleted;
+    @ManyToOne
+    @JoinColumn(name = "role")
+    private Authority authority;
 
+    public MyUserDetails() {
+    }
+
+    public MyUserDetails(String username, String password, String realName, String email, boolean isAccountNonExpired, boolean isAccountNonLocked, boolean isCredentialsNonExpired, boolean isEnabled, Dept dept,Authority authority) {
+        this.username = username;
+        this.password = password;
+        this.realName = realName;
+        this.email = email;
+        this.isAccountNonExpired = isAccountNonExpired;
+        this.isAccountNonLocked = isAccountNonLocked;
+        this.isCredentialsNonExpired = isCredentialsNonExpired;
+        this.isEnabled = isEnabled;
+        this.dept = dept;
+        this.authority = authority;
+    }
     @Override
     public Set<Authority> getAuthorities() {
+        if(authority==null){
+            return null;
+        }else{
+            if(authorities==null){
+                authorities = new HashSet<>();
+            }else {
+                authorities.clear();
+            }
+            authorities.add(authority);
+        }
         return authorities;
     }
 
@@ -110,10 +143,6 @@ public class MyUserDetails implements Serializable, org.springframework.security
         isEnabled = enabled;
     }
 
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -130,14 +159,13 @@ public class MyUserDetails implements Serializable, org.springframework.security
         this.dept = dept;
     }
 
-    @Basic
-    @Column(name = "deleted")
-    public boolean isDeleted() {
-        return isDeleted;
+
+    public Authority getAuthority() {
+        return authority;
     }
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public void setAuthority(Authority authority) {
+        this.authority = authority;
     }
 
     @Override
@@ -153,7 +181,7 @@ public class MyUserDetails implements Serializable, org.springframework.security
                 ", isCredentialsNonExpired=" + isCredentialsNonExpired +
                 ", isEnabled=" + isEnabled +
                 ", dept=" + dept +
-                ", authorities=" + authorities +
+                ", authority=" + authority +
                 '}';
     }
 }

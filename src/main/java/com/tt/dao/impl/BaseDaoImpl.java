@@ -163,6 +163,9 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
     @Override
     public void update(T o) {
         if (o != null) {
+            if (entityClass.getSuperclass() == BaseModel.class) {
+                ((BaseModel)o).setDept_id(getDeptId());
+            }
             this.getCurrentSession().update(o);
         }
     }

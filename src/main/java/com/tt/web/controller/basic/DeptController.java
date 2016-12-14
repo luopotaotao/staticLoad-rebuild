@@ -2,6 +2,7 @@ package com.tt.web.controller.basic;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ public class DeptController extends BaseController<Dept> {
     @Autowired
     private DeptServiceI deptService;
 
+    @Secured({"ROLE_SUPER","ROLE_ADMIN"})
     @RequestMapping("index")
     public String index(Model model) {
         return "module_basic/dept_";
@@ -65,9 +67,9 @@ public class DeptController extends BaseController<Dept> {
     //    @RequestMapping(value = "post", method = RequestMethod.POST)
     @RequestMapping(value = "post")
     @ResponseBody
-    public JSONObject add(@ModelAttribute Dept dept) {
-        deptService.add(dept);
-        return flagResponse(dept.getId() > 0);
+    public Dept add(@ModelAttribute Dept dept) {
+        dept = deptService.add(dept);
+        return dept;
     }
 
     @RequestMapping(value = "put", method = RequestMethod.POST)

@@ -47,7 +47,7 @@ public class OverViewProjectServiceImpl implements OverViewProjectServiceI {
         return ret;
     }
 
-    @Secured(value = "hasAnyRole('SUPER','ADMIN')")
+    @Secured({"ROLE_SUPER","ROLE_ADMIN"})
     @Override
     public List<OverViewProject> listByAreaId(Integer area_id) {
         StringBuilder hql = new StringBuilder("from OverViewProject WHERE dept_id=:dept_id");
@@ -70,7 +70,7 @@ public class OverViewProjectServiceImpl implements OverViewProjectServiceI {
     @Secured(value = "hasRole('CUSTOM')")
     @Override
     public List<OverViewProject> list() {
-        String hql = "from OverViewProject p WHERE p.dept_id=:dept_id and p.id in (select plan.project.id from InspectPlan plan where plan.id in (select up.planId from UserPlan up where up.userId=:userId))";
+        String hql = "from OverViewProject p WHERE p.dept_id=:dept_id and p.id in (select plan.project.id from InspectPlan plan where plan.inspector.id=:userId or plan.majorInspector.id=:userId or plan.assistantInspector.id=:userId)";
 
         Map<String, Object> params = new HashMap<>();
         MyUserDetails userDetails = SessionUtil.getUser();

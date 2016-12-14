@@ -275,9 +275,9 @@
                         style: {
                             fontWeight: 'bold'
                         },
-                        verticalAlign: 'middle',
-                        overflow: true,
-                        crop: false,
+                        verticalAlign: 'bottom',
+                        overflow: 'justify',
+//                        crop: false,
                         formatter: function () {
                             return this.series.name + ' kN';
                         }

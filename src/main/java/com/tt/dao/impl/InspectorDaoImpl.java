@@ -18,15 +18,13 @@ import java.util.Map;
 public class InspectorDaoImpl extends BaseDaoImpl<Inspector> implements InspectorDaoI {
 
     @Override
-    public List<Inspector> list(String name, Integer page, Integer pageSize) {
+    public List<Inspector> list(Map<String,Object> params, Integer page, Integer pageSize) {
+        String name = (String) params.get("name");
         Criteria criteria = getCriteria(page,pageSize).addOrder(Order.asc("id"));
+
         if(name!=null&&!name.trim().isEmpty()){
             criteria.add(Restrictions.like("name","%"+name+"%"));
         }
-//        if(page!=null&&pageSize!=null){
-//            criteria.setFirstResult((page-1)*pageSize);
-//            criteria.setMaxResults(pageSize);
-//        }
         return criteria.list();
     }
 

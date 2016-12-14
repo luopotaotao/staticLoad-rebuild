@@ -12,7 +12,7 @@
     <table id="dg_user" style="width:100%"></table>
     <div id="dlg_user_edit" class="easyui-dialog" style="width:100%;max-width:400px;padding:30px 60px;"
          data-options="
-            //title: '添加人员',
+            title: '编辑',
             closed: true,
             modal: true,
             draggable: false,
@@ -27,10 +27,10 @@
             handler: $.closeUserEditDialog
             }]
         ">
-        <form id="ff_user" class="easyui-form" method="post" data-options="novalidate:true"
-              action="<c:url value="/basic/inspector/post"/>">
+        <form id="ff_user" class="easyui-form" method="post" data-options="novalidate:false"
+              action="<c:url value="/basic/user/post"/>">
             <div style="margin-bottom:20px;display: none">
-                <input class="easyui-textbox" name="id" style="width:100%" data-options="label:'用户编号:',required:true">
+                <input class="easyui-textbox" name="id" style="width:100%" data-options="label:'用户编号:'">
             </div>
             <div style="margin-bottom:20px">
                 <input class="easyui-textbox" name="username" style="width:100%"
@@ -50,25 +50,23 @@
             </div>
 
             <div style="margin-bottom:20px">
-                <select class="easyui-combobox" data-options="editable:false" name="role"
+                <select id="user_authority_id" class="easyui-combobox" data-options="editable:false,multiple:false" name="authority.id"
                         label="角色:" style="width:100%">
                     <sec:authorize access="hasRole('SUPER')">
-                        <option value="1">管理员</option>
+                        <option value="1">超级管理员</option>
+                        <option value="2">管理员</option>
                     </sec:authorize>
-                    <option value="2">普通用户</option>
+                    <option value="3">普通用户</option>
                 </select>
             </div>
         </form>
     </div>
     <script type="text/javascript">
         $(function () {
-            var dept_id = '${dept_id}';
+            var dept_id = '${dept_id}'||'<sec:authentication property="principal.dept.id"/>';
             $('#dg_user').datagrid({
-                url: '<c:url value="/basic/inspector/queryAll"/>',
+                url: '<c:url value="/basic/user/queryAll/"/>'+dept_id,
                 method: 'get',
-//                title: '人员管理',
-//                iconCls: 'icon-save',
-//            width: 700,
                 height: $('body').height(),
                 fitColumns: true,
                 singleSelect: false,
@@ -123,8 +121,8 @@
                     {field: 'realName', title: '姓名'},
 //                    {field: 'password', title: '密码'},
                     {
-                        field: 'role', title: '角色', formatter: function (val, row) {
-                        return ['超级管理员', '管理员', '普通用户'][val || 2];
+                        field: 'authority', title: '角色', formatter: function (val, row) {
+                        return {'ROLE_SUPER':'超级管理员', 'ROLE_ADMIN':'管理员', 'ROLE_CUSTOM':'普通用户'}[val.authority]||'普通用户';
                     }
                     },
                     {field: 'note', title: '备注'}
@@ -136,11 +134,11 @@
                 var $ff = $('#ff_user');
                 if (data) {
                     $ff.form('load', data);
-                    $ff.form({url: '<c:url value="/basic/inspector/put"/>'});
+                    $ff.form({url: '<c:url value="/basic/user/put"/>'});
                 } else {
-                    $ff.form({url: '<c:url value="/basic/inspector/post"/>'});
+                    $ff.form({url: '<c:url value="/basic/user/post"/>'});
                 }
-                $('#user_dept_id').textbox('setValue', dept_id);
+                $('#user_authority_id').combobox('setValue', data.authority.id);
                 $('#dlg_user_edit').dialog('open');
             }
 
@@ -149,8 +147,7 @@
                 $.messager.progress();
                 $('#ff_user').form('submit', {
                     onSubmit: function (param) {
-                        param['dept.id'] = dept_id;
-                        var isValid = $(this).form('validate');
+                        var isValid = $(this).form('enableValidation').form('validate');
                         if (!isValid) {
                             $.messager.progress('close');
                         }
@@ -163,7 +160,7 @@
                             $.messager.alert('提示', '保存成功!');
                             closeEditDialog(true);
                         } else {
-                            $.messager.alert('提示', data.message || '保存失败,请检查网络连接或者权限!');
+                            $.messager.alert('提示', data.msg || '保存失败,请检查网络连接或者权限!');
                         }
                     }
                 });
@@ -181,7 +178,7 @@
             $.closeUserEditDialog = closeEditDialog;
             function remove(ids) {
                 $.ajax({
-                    url: '<c:url value="/basic/inspector/delete"/>',
+                    url: '<c:url value="/basic/user/delete"/>',
                     data: {ids: ids},
                     type: 'post',
                     dataType: 'json'

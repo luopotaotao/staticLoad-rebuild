@@ -2,6 +2,7 @@ package com.tt.web.config;
 
 import com.tt.web.exception.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,6 +51,18 @@ public class ControllerConfig {
         return getMsgMap("没有相关记录!");
     }
     
+    @ExceptionHandler(value = AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public Map<String, String> accessDeniedException(){
+        return getMsgMap("权限不足!");
+    }
+    @ExceptionHandler(value = DeptNullException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String needDeptException(){
+        return "main/error";
+    }
+
 
 
 

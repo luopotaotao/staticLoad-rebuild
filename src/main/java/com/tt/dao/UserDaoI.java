@@ -9,5 +9,5 @@ import java.util.List;
  * Created by taotao on 2016/9/23.
  */
 public interface UserDaoI extends BaseDaoI<MyUserDetails> {
-    List<MyUserDetails> list(String name, Integer page, Integer pageSize);
+//    List<MyUserDetails> list(String name, Integer page, Integer pageSize);
 }

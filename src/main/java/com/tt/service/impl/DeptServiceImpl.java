@@ -1,6 +1,10 @@
 package com.tt.service.impl;
 
+import com.tt.dao.UserDaoI;
+import com.tt.ext.security.MyUserDetails;
+import com.tt.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import com.tt.dao.DeptDaoI;
 import com.tt.model.Dept;
@@ -20,7 +24,6 @@ import java.util.Map;
 public class DeptServiceImpl implements DeptServiceI {
     @Autowired
     private DeptDaoI deptDao;
-
     @Override
     public Dept get(Serializable id) {
         return deptDao.getById(id);
@@ -39,6 +42,10 @@ public class DeptServiceImpl implements DeptServiceI {
         if(name!=null&&!name.toString().isEmpty()){
             params.put("name","%"+name+"%");
             hql.append(" AND name like :name ");
+        }
+        if (!SessionUtil.hasRole("ROLE_SUPER")) {
+            params.put("dept_id", SessionUtil.getUser().getDept().getId());
+            hql.append(" and id=:dept_id");
         }
         List<Dept> ret = deptDao.find(hql.toString(), params, page, PageSize);
         return ret;

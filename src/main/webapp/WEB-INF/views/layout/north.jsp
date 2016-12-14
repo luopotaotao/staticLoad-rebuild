@@ -5,7 +5,15 @@
 
 <script type="text/javascript" charset="utf-8">
     $(function () {
-        openModule('<c:url value="/overview/main/index"/>');
+
+        openModule(
+                <sec:authorize access="hasAnyRole('ADMIN','CUSTOM')">
+                    '<c:url value="/overview/main/index"/>'
+                </sec:authorize>
+                <sec:authorize access="hasRole('SUPER')">
+                     '<c:url value="/basic/index/index?selectDept=true"/>'
+                </sec:authorize>
+        );
     });
 
     function logoutFun() {
@@ -35,7 +43,7 @@
     }
     function showUserInfo() {
         $.ajax({
-            url: '<c:url value="/userController/userInfo"/>',
+            url: '<c:url value="/basic/user/currentUser"/>',
             type: 'get',
             dataType: 'json'
         }).done(function (ret) {
@@ -213,12 +221,9 @@
             //iconCls: 'icon-add',
             buttons: [{
             text: '确定',
-            handler: null
-            },{
-            text: '重置密码',
             handler: function(){
                 $('#ff_user_info').form('enableValidation').form('submit', {
-                    url: '<c:url value="/userController/editCurrentUserPwd"/>',
+                    url: '<c:url value="/basic/user/changePwd"/>',
                     onSubmit: function(){
                         var isValid = $(this).form('validate');
                         if (!isValid){
@@ -235,26 +240,26 @@
             }]
         ">
     <form id="ff_user_info" class="easyui-form" method="post" data-options="novalidate:true"
-          action="<c:url value="/basic/inspector/post"/>"/>
+          action="<c:url value="/basic/user/put"/>"/>
     <div style="margin-bottom:20px">
-        <input class="easyui-textbox" name="name" style="width:100%"
+        <input class="easyui-textbox" name="username" style="width:100%"
                data-options="label:'账号:',editable:false">
     </div>
     <div style="margin-bottom:20px">
         <input class="easyui-textbox" name="email" style="width:100%"
-               data-options="label:'Email:',editable:false">
+               data-options="label:'Email:',editable:true">
     </div>
 
     <div style="margin-bottom:20px">
-        <input class="easyui-textbox" name="password" style="width:100%"
+        <input id="user_pwd_old" class="easyui-textbox" name="password" style="width:100%"
                data-options="label:'原始密码:',required:true" type="password">
     </div>
     <div style="margin-bottom:20px">
-        <input class="easyui-textbox" name="new_password" style="width:100%"
+        <input id="user_pwd_new" class="easyui-textbox" name="new_password" style="width:100%"
                data-options="label:'新密码:',required:true" validType="length[4,32]" id="new_password" type="password">
     </div>
     <div style="margin-bottom:20px">
-        <input class="easyui-textbox" name="role" style="width:100%"
+        <input id="user_pwd_repeat" class="easyui-textbox" name="role" style="width:100%"
                data-options="label:'确认密码:',required:true" type="password"
                validType="equalTo['#new_password']" invalidMessage="两次输入密码不匹配">
     </div>

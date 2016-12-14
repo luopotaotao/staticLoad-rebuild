@@ -32,9 +32,7 @@ public class InspectorServiceImpl implements InspectorServiceI {
 
     @Override
     public List<Inspector> list(Map<String,Object> params, Integer page, Integer pageSize) {
-        String name = (String) params.get("name");
-        Integer current_role = (Integer) params.get("role");
-        List<Inspector> ret = inspectorDao.list( name, null,null);
+        List<Inspector> ret = inspectorDao.list( params, null,null);
         return ret;
     }
 

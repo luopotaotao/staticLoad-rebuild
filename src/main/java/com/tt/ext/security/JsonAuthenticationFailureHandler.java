@@ -2,6 +2,7 @@ package com.tt.ext.security;
 
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -31,6 +32,8 @@ public class JsonAuthenticationFailureHandler implements AuthenticationFailureHa
             msg="登录信息已过期,请重新登录!";
         }else if(exception instanceof BadCredentialsException){
             msg="登录失败,用户名或密码错误!";
+        }else if(exception instanceof LockedException){
+            msg="登录失败,用户名已锁定!";
         }
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(String.format(template,msg));

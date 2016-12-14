@@ -2,6 +2,7 @@ package com.tt.web.controller.overview;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.tt.annotation.NeedDept;
 import com.tt.service.OverViewProjectServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,7 @@ public class OverviewController extends BaseController<Overview>{
     private OverViewProjectServiceI overViewProjectService;
 
     @RequestMapping("index")
+    @NeedDept
     public String index(Model model, @RequestParam(value = "project_id",required = false) Integer id) {
         OverViewProject selectedProject = null;
         if(id!=null&&id>0){

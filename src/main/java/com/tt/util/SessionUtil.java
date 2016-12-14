@@ -38,12 +38,16 @@ public class SessionUtil {
     }
 
     public static boolean hasRole(String... roles) {
-        Set<Authority> authorities = getUser().getAuthorities();
-        if (authorities == null || authorities.isEmpty() || roles == null || roles.length < 1) {
+        Authority authority = getUser().getAuthority();
+
+        if (authority == null) {
             return false;
+        }else{
+            String cur_role = authority.getAuthority();
+            if(cur_role==null||cur_role.trim().isEmpty()){
+                return false;
+            }
+            return Arrays.stream(roles).anyMatch(role -> cur_role.equals(role));
         }
-        return authorities.parallelStream().anyMatch(authority ->
-                Arrays.stream(roles).anyMatch(role -> authority.getAuthority().equals(role))
-        );
     }
 }

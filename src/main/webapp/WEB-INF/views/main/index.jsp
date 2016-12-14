@@ -4,7 +4,6 @@
 <html>
 <head>
     <title>智能无线静荷载试验检测云平台</title>
-    <%--<link type="text/css" rel="stylesheet" href="<c:url value="/resources/style/laserCoreCss.css"/>">--%>
     <link id="easyuiTheme" rel="stylesheet"
           href="<c:url value="/resources/jslib/easyui/themes/default/easyui.css"/>" type="text/css">
     <link rel="stylesheet" type="text/css"

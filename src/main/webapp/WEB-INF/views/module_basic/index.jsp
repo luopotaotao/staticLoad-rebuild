@@ -45,6 +45,7 @@
             }
             </sec:authorize>
         ];
+        var selectDept = "${selectDept}";
         initUI();
         function initUI() {
             $('#tree_menu').tree({
@@ -55,6 +56,11 @@
                 onClick: function (node) {
                     if (node.text && node.url) {
                         openTab(node.text, node.url);
+                    }
+                },onLoadSuccess: function (node, data) {
+                    if (selectDept=='true') {
+                        var node = $('#tree_menu').tree('find', 15);
+                        $(node.target).click();
                     }
                 }
             });

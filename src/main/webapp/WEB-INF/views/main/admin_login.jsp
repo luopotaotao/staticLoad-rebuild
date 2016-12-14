@@ -1,10 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--<%--%>
-    <%--HttpSession s = request.getSession();--%>
-    <%--s.setMaxInactiveInterval(300);--%>
-    <%--String dept_id = request.getParameter("dept_id");--%>
-<%--%>--%>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -182,13 +177,15 @@
                 <tr>
                     <td align="right">验证码：</td>
                     <td><input name="verifycode" id="verifycode" style="width: 80px" maxlength="4" class="txt"
-                               tabindex="3"><img id="code"
-                                                 src="authimg?now=new Date()"
-                                                 alt="点击更换"
-                                                 width="65"
-                                                 height="25"
-                                                 align="absMiddle"
-                                                 onClick="this.src='authimg?now='+new Date()">
+                               tabindex="3">
+                        <%--<img id="code"--%>
+                                                 <%--src="authimg?now=new Date()"--%>
+                                                 <%--alt="点击更换"--%>
+                                                 <%--width="65"--%>
+                                                 <%--height="25"--%>
+                                                 <%--align="absMiddle"--%>
+                                                 <%--onClick="this.src='authimg?now='+new Date()">--%>
+                        <img src="<c:url value="/resources/style/images/authcode.png"/>" width="65" height="25" align="absMiddle">
                     </td>
                 </tr>
                 </tbody>
