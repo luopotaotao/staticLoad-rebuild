@@ -333,7 +333,10 @@
             });
         }
     });
-    function openDialog(title, href) {
+    function openDialog(title, href,data) {
+        if(data){
+            $('#details').data("data",data);
+        }
         $('#details').dialog({
             title: title,
             width: $('body').width() * 0.8,
@@ -347,12 +350,12 @@
 
 
     function manageTUsers(id) {
-        var href = '<c:url value="/basic/inspector/index/"/>' + id;
-        openDialog('账号管理', href);
+        var href = '<c:url value="/basic/inspector/index"/>';
+        openDialog('账号管理', href,{id:id});
     }
     function manageEquipments(id) {
-        var href = '<c:url value="/basic/equipment/index/"/>' + id;
-        openDialog('设备管理', href);
+        var href = '<c:url value="/basic/equipment/index/"/>';
+        openDialog('设备管理', href,{id:id});
     }
     var r = null;
     function initResumable() {

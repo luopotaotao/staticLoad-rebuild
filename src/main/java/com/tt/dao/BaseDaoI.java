@@ -19,6 +19,7 @@ public interface BaseDaoI<T>
 {
 
     Criteria getCriteria();
+    Criteria getCriteria(boolean checkDept);
     /**
      * 保存一个对象
      * 

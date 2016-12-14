@@ -26,8 +26,7 @@ public class EquipmentController extends BaseController<Equipment> {
     private EquipmentServiceI equipmentService;
 
     @RequestMapping("index/{dept_id}")
-    public String index(@PathVariable Integer dept_id, Model model){
-        model.addAttribute("dept_id");
+    public String index(){
         return "module_basic/dept_equipment";
     }
 

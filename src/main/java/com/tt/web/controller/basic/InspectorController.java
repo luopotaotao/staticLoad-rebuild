@@ -23,9 +23,8 @@ public class InspectorController extends BaseController<Inspector> {
     @Autowired
     private InspectorServiceI inspectorService;
 
-    @RequestMapping("index/{dept_id}")
-    public String index(@PathVariable Integer dept_id, Model model) {
-        model.addAttribute("dept_id", dept_id);
+    @RequestMapping("index")
+    public String index() {
         return "module_basic/dept_users";
     }
 

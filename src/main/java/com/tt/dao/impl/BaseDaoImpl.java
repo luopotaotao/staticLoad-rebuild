@@ -3,6 +3,7 @@ package com.tt.dao.impl;
 
 import com.tt.dao.BaseDaoI;
 import com.tt.model.BaseModel;
+import com.tt.model.Dept;
 import com.tt.util.SessionUtil;
 import org.hibernate.*;
 import org.hibernate.criterion.Projections;
@@ -32,7 +33,8 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
     }
 
     private Integer getDeptId() {
-        return SessionUtil.getUser().getDept().getId();
+        Dept dept = SessionUtil.getUser().getDept();
+        return dept==null?null:dept.getId();
     }
 
     /**
@@ -53,8 +55,17 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
         return criteria;
     }
 
+    @Override
+    public Criteria getCriteria(boolean checkDept) {
+        Criteria criteria = getCurrentSession().createCriteria(entityClass);
+        if (checkDept&&(entityClass.getSuperclass() == BaseModel.class)) {
+            criteria.add(Restrictions.eq("dept_id", getDeptId()));
+        }
+        return criteria;
+    }
+
     public Criteria getCriteria(Map<String, Object> params) {
-        Criteria c = getCriteria();
+        Criteria c = getCriteria(!(params!=null&&params.containsKey("dept_id")));
         if (params != null && !params.isEmpty()) {
             params.forEach((key, val) -> {
                 if (val instanceof String) {
@@ -69,7 +80,6 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
                 } else {
                     c.add(Restrictions.eq(key, val));
                 }
-
             });
         }
 
@@ -98,7 +108,11 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
     public Serializable save(T o) {
         if (o != null) {
             if (entityClass.getSuperclass() == BaseModel.class) {
-                ((BaseModel)o).setDept_id(getDeptId());
+                BaseModel target = (BaseModel)o;
+                //若页面没有设置dept_id 或者 不具有超级管理员权限,则设置为当前登录用户所属组
+                if(target.getDept_id()==null||!SessionUtil.hasRole("ROLE_SUPER")){
+                    ((BaseModel)o).setDept_id(getDeptId());
+                }
             }
             return this.getCurrentSession().save(o);
         }

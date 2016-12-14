@@ -64,9 +64,10 @@
     </div>
     <script type="text/javascript">
         $(function () {
-            var dept_id = '${dept_id}' || '<sec:authentication property="principal.dept.id"/>';
+//            alert(JSON.stringify($('#details').data("data")));
+            var dept_id = $('#details').data("data").id;
             $('#dg_user').datagrid({
-                url: '<c:url value="/basic/user/queryAll/"/>' + dept_id,
+                url: '<c:url value="/basic/user/queryAll/"/>' + dept_id+'?123',
                 method: 'get',
                 height: $('body').height(),
                 fitColumns: true,
@@ -159,6 +160,10 @@
                         if (!isValid) {
                             $.messager.progress('close');
                         }
+                        console.log( $('#details').data("data").id);
+                        if(dept_id){
+                            param.dept_id =  $('#details').data("data").id;
+                        }
                         return isValid;
                     },
                     success: function (data) {
@@ -178,7 +183,7 @@
                 if (needRefresh) {
                     $('#dg_user').datagrid('reload');
                 }
-                $('#ff_user').form('clear');
+                $('#ff_user').form('reset');
                 $('#dlg_user_edit').dialog('close');
             }
 
