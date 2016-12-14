@@ -14,15 +14,15 @@ import org.aspectj.lang.annotation.Aspect;
 @Aspect
 public class DeptAspect {
     @Around("@annotation(com.tt.annotation.NeedDept)")
-    public void testAround(ProceedingJoinPoint pj) throws Throwable {
+    public Object testAround(ProceedingJoinPoint pj) throws Throwable {
 
         System.out.println("before");
         Dept dept = SessionUtil.getUser().getDept();
         if(dept==null||dept.getId()==null){
             throw new DeptNullException("需要设置公司才可查看数据!");
         }
-        pj.proceed();
         System.out.println("after");
+        return pj.proceed();
     }
 
 

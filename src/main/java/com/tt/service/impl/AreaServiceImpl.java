@@ -72,10 +72,10 @@ public class AreaServiceImpl implements AreaServiceI {
         Map<String,Object> params = new HashMap<>();
         if(pid==0){
             params.put("level",(byte)1);
-            sql = "select new map(a.id as id,a.text as text) from Area a where level=:level";
+            sql = "select new map(a.id as id,a.text as text) from Area a where level=:level and a.dept_id=:dept_id";
         }else{
             params.put("pid",pid);
-            sql = "select new map(a.id as id,a.text as text) from Area a where pid=:pid";
+            sql = "select new map(a.id as id,a.text as text) from Area a where pid=:pid and a.dept_id=:dept_id";
         }
 
 

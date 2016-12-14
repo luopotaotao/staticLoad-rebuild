@@ -8,12 +8,13 @@
 
         openModule(
                 <sec:authorize access="hasAnyRole('ADMIN','CUSTOM')">
-                    '<c:url value="/overview/main/index"/>'
-                </sec:authorize>
-                <sec:authorize access="hasRole('SUPER')">
-                     '<c:url value="/basic/index/index?selectDept=true"/>'
-                </sec:authorize>
-        );
+                '<c:url value="/overview/main/index"/>'
+        </sec:authorize>
+        <sec:authorize access="hasRole('SUPER')">
+        '<c:url value="/basic/index/index?selectDept=true"/>'
+        </sec:authorize>
+        )
+        ;
     });
 
     function logoutFun() {
@@ -23,19 +24,11 @@
                         "您确定要退出本系统？",
                         function (c) {
                             if (c) {
-                                $
-                                        .ajax({
-                                            url: '<c:url value="/logout"/>',
-                                            type: 'GET',
-                                            timeout: 1000,
-                                            <%--success: function (result) {--%>
-                                            <%--location.href = '<c:url value="/"/>';--%>
-                                            <%--},--%>
-                                            <%--error: function () {--%>
-                                            <%--location.href = '<c:url value="/"/>';--%>
-                                            <%--},--%>
-
-                                        }).always(function () {
+                                $.ajax({
+                                    url: '<c:url value="/logout"/>',
+                                    type: 'GET',
+                                    timeout: 1000
+                                }).always(function () {
                                     location.href = '<c:url value="/login"/>';
                                 });
                             }
@@ -87,7 +80,7 @@
             type: 'get',
             dataType: 'json'
         }).done(function (ret) {
-            if (ret.flag) {
+            if (ret.id) {
                 var logo = null;
                 if (ret.logo) {
                     logo = '<img src="' + base_url + ret.logo + '">'
@@ -95,6 +88,7 @@
                     logo = '<h2 style="color:white;margin: 5px;">智能无线静荷载试验检测云平台</h2>';
                 }
                 $('#logo_div').empty().append(logo);
+                $('#current_dept_name').text(ret.name);
                 openModule('<c:url value="/overview/main/index"/>');
             }
         }).fail(function () {
@@ -197,7 +191,19 @@
                 ${realName}
             </div>
 
+
             <div style="margin-top: 10px">
+                <sec:authorize access="hasRole('SUPER')">
+                    <sec:authentication property="principal.dept" var="dept"/>
+                    <a id="current_dept_name" href="javascript:openModule('<c:url value="/basic/index/index?selectDept=true"/>')">
+                        <c:if test="${not empty dept}">
+                            ${dept.name}
+                        </c:if>
+                        <c:if test="${empty dept}">
+                            切换公司
+                        </c:if>
+                    </a>
+                </sec:authorize>
                 <a href="javascript:;" onclick="showUserInfo()"
                    style="color: white;"><img
                         src="<c:url value="/resources/style/images/icons/icon_user_sm.png"/>"

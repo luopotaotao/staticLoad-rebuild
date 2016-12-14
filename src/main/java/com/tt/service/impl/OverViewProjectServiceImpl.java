@@ -67,7 +67,7 @@ public class OverViewProjectServiceImpl implements OverViewProjectServiceI {
         return list;
     }
 
-    @Secured(value = "hasRole('CUSTOM')")
+    @Secured({"ROLE_CUSTOM"})
     @Override
     public List<OverViewProject> list() {
         String hql = "from OverViewProject p WHERE p.dept_id=:dept_id and p.id in (select plan.project.id from InspectPlan plan where plan.inspector.id=:userId or plan.majorInspector.id=:userId or plan.assistantInspector.id=:userId)";

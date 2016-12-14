@@ -61,7 +61,7 @@ public class ProjectServiceImpl implements ProjectServiceI {
     public List<Project> list(Map<String, Object> params) {
         List<Project> list;
 
-        StringBuilder hql = new StringBuilder("select distinct p from Project p join fetch p.children s join fetch s.children plan WHERE p.dept_id=:dept_id");
+        StringBuilder hql = new StringBuilder("select distinct p from Project p left join fetch p.children s left join fetch s.children plan WHERE p.dept_id=:dept_id");
         if (SessionUtil.hasRole("ROLE_CUSTOM")) {
             params = new HashMap<>();
             params.put("userId", SessionUtil.getUser().getId());

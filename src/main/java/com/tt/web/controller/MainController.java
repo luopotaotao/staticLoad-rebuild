@@ -24,19 +24,21 @@ public class MainController {
     @Autowired
     private DeptServiceI deptService;
 
-    @RequestMapping(value = "index",method = RequestMethod.GET)
-    public String index(){
+    @RequestMapping(value = "index", method = RequestMethod.GET)
+    public String index() {
         return "main/index";
     }
-    @RequestMapping(value = "login",method = RequestMethod.GET)
-    public String login(@RequestParam(required = false) String info){
+
+    @RequestMapping(value = "login", method = RequestMethod.GET)
+    public String login(@RequestParam(required = false) String info) {
         return "main/admin_login";
     }
+
     @RequestMapping("/logout")
     @ResponseBody
-    public String logout(HttpServletRequest request, HttpServletResponse response){
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null){
+        if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         response.setStatus(HttpServletResponse.SC_OK);
@@ -44,24 +46,21 @@ public class MainController {
     }
 
     @RequestMapping("authimg")
-    public void kaptcha(){
+    public void kaptcha() {
 
     }
 
     @RequestMapping("/welcome")
-    public String welcome(){
+    public String welcome() {
         return "main/welcome";
     }
-    @Secured("hasRole('SUPER')")
+
+    @Secured({"ROLE_SUPER"})
     @RequestMapping("switchDept/{id}")
     @ResponseBody
-    public Dept switchDept(@PathVariable(value ="id") Integer id){
+    public Dept switchDept(@PathVariable(value = "id") Integer id) {
         Dept dept = deptService.get(id);
-
-        MyUserDetails userDetails = SessionUtil.getUser();
-        System.out.println("before dept:"+userDetails.getDept().getId());
         SessionUtil.getUser().setDept(dept);
-        System.out.println("after dept:"+userDetails.getDept().getId());
         return dept;
     }
 }

@@ -8,20 +8,17 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div style="width:100%;max-width:600px;padding:30px 60px;">
-    <input id="project_add_plan_dept_id" type="hidden" name="dept.id">
     <form class="easyui-form" method="post" data-options="novalidate:true" action="<c:url value="/inspect/plan/post"/>">
         <div style="margin-bottom:20px;display: none">
-            <input class="easyui-textbox" name="id" style="display: none" data-options="label:'编号:'">
+            <input class="easyui-textbox" name="id" data-options="label:'编号:'">
         </div>
         <div style="margin-bottom:20px">
             <input class="easyui-textbox" name="name" style="width:45%" data-options="label:'计划名称:',labelAlign:'right',required:true">
             <input class="easyui-textbox" name="stzh" style="width:45%" data-options="label:'桩号:',labelAlign:'right',required:true">
         </div>
         <div style="margin-bottom:20px;display: none">
-            <input class="easyui-textbox select-scheme" name="inspectScheme.id" style="width:45%"
-                   data-options="label:'方案id:',labelAlign:'right',required:true,editable:false">
-            <input class="easyui-textbox select-scheme" name="project.id" style="width:45%"
-                   data-options="label:'工程id:',labelAlign:'right',required:true,editable:false">
+            <input name="inspectScheme.id">
+            <input name="project.id">
         </div>
         <div style="margin-bottom:20px">
             <input class="easyui-textbox select-inspector" name="inspector.id" style="width:45%"

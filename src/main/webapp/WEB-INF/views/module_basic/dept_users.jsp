@@ -50,7 +50,8 @@
             </div>
 
             <div style="margin-bottom:20px">
-                <select id="user_authority_id" class="easyui-combobox" data-options="editable:false,multiple:false" name="authority.id"
+                <select id="user_authority_id" class="easyui-combobox" data-options="editable:false,multiple:false"
+                        name="authority.id"
                         label="角色:" style="width:100%">
                     <sec:authorize access="hasRole('SUPER')">
                         <option value="1">超级管理员</option>
@@ -63,9 +64,9 @@
     </div>
     <script type="text/javascript">
         $(function () {
-            var dept_id = '${dept_id}'||'<sec:authentication property="principal.dept.id"/>';
+            var dept_id = '${dept_id}' || '<sec:authentication property="principal.dept.id"/>';
             $('#dg_user').datagrid({
-                url: '<c:url value="/basic/user/queryAll/"/>'+dept_id,
+                url: '<c:url value="/basic/user/queryAll/"/>' + dept_id,
                 method: 'get',
                 height: $('body').height(),
                 fitColumns: true,
@@ -122,7 +123,11 @@
 //                    {field: 'password', title: '密码'},
                     {
                         field: 'authority', title: '角色', formatter: function (val, row) {
-                        return {'ROLE_SUPER':'超级管理员', 'ROLE_ADMIN':'管理员', 'ROLE_CUSTOM':'普通用户'}[val.authority]||'普通用户';
+                        return {
+                                    'ROLE_SUPER': '超级管理员',
+                                    'ROLE_ADMIN': '管理员',
+                                    'ROLE_CUSTOM': '普通用户'
+                                }[val.authority] || '普通用户';
                     }
                     },
                     {field: 'note', title: '备注'}
@@ -138,7 +143,10 @@
                 } else {
                     $ff.form({url: '<c:url value="/basic/user/post"/>'});
                 }
-                $('#user_authority_id').combobox('setValue', data.authority.id);
+                if (data && data.authority) {
+                    $('#user_authority_id').combobox('setValue', data.authority.id);
+                }
+
                 $('#dlg_user_edit').dialog('open');
             }
 

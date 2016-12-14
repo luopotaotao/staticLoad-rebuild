@@ -31,8 +31,8 @@ public class OverviewController extends BaseController<Overview>{
     @Autowired
     private OverViewProjectServiceI overViewProjectService;
 
-    @RequestMapping("index")
     @NeedDept
+    @RequestMapping("index")
     public String index(Model model, @RequestParam(value = "project_id",required = false) Integer id) {
         OverViewProject selectedProject = null;
         if(id!=null&&id>0){
@@ -40,17 +40,6 @@ public class OverviewController extends BaseController<Overview>{
         }
 
         if(selectedProject!=null){
-//            JSONObject project = new JSONObject();
-//            project.put("name",selectedProject.getName());
-//            project.put("code",selectedProject.getCode());
-//            JSONObject city = new JSONObject();
-//            city.put("text",selectedProject.getCity().getText());
-//            project.put("city",city);
-//            project.put("id",selectedProject.getId());
-//            project.put("lat",selectedProject.getLat());
-//            project.put("lng",selectedProject.getLng());
-
-
             model.addAttribute("selectedProject",JSONObject.toJSON(selectedProject));
         }else{
             model.addAttribute("selectedProject","null");

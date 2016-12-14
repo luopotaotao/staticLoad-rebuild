@@ -10,13 +10,13 @@
 <div style="width:100%;max-width:600px;padding:30px 60px;">
     <form class="easyui-form" method="post" data-options="novalidate:true" action="<c:url value="/project/manage/post"/>">
         <div style="margin-bottom:20px;display: none">
-            <input class="easyui-textbox" name="id" style="width:100%" data-options="label:'企业编号:'">
+            <input class="easyui-textbox" name="id" style="width:100%" data-options="label:'工程编号:'">
         </div>
         <div style="margin-bottom:20px">
             <input class="easyui-textbox" name="code" style="width:45%"
                    data-options="label:'工程编码:',labelAlign:'right',required:true">
             <input class="easyui-textbox" name="name" style="width:45%"
-                   data-options="label:'工程名称:',labelAlign:'right'">
+                   data-options="label:'工程名称:',labelAlign:'right',required:true">
         </div>
         <div style="margin-bottom:20px">
             <select id="project_province_id" class="easyui-combobox" name="province.id" style="width:45%"
@@ -26,29 +26,30 @@
             method:'get',
             valueField: 'id',
             textField: 'text',
+            editable:false,
             onSelect:function(rec){
                 var $city = $('#project_add_project_city_id');
                 $city.combobox('clear');
                 $city.combobox('reload','<c:url value="/basic/area/area/"/>'+rec.id);
-            }
+            },required:true
             ">
 
             </select>
             <select id="project_add_project_city_id" class="easyui-combobox" name="city.id" style="width:45%"
-                    data-options="label:'所在城市:',labelAlign:'right', method:'get',valueField: 'id',textField: 'text'">
+                    data-options="label:'所在城市:',labelAlign:'right', method:'get',valueField: 'id',textField: 'text',editable:false,required:true">
             </select>
         </div>
         <div style="margin-bottom:20px">
             <input class="easyui-textbox" name="address" style="width:90%"
-                   data-options="label:'具体地址:',labelAlign:'right'">
+                   data-options="label:'具体地址:',labelAlign:'right',required:true">
         </div>
         <div style="margin-bottom:20px;display: none">
             <input id="project_add_project_input_lat" class="easyui-textbox" name="lat" style="width:100%"
-                   data-options="label:'纬度:'">
+                   data-options="label:'纬度:',required:true">
         </div>
         <div style="margin-bottom:20px;display: none">
             <input id="project_add_project_input_lng" class="easyui-textbox" name="lng" style="width:100%"
-                   data-options="label:'经度:'">
+                   data-options="label:'经度:',required:true">
         </div>
         <div style="margin-bottom:20px">
             <input id="project_add_project_select_coordinate" class="easyui-textbox" style="width:45%;height:32px;">

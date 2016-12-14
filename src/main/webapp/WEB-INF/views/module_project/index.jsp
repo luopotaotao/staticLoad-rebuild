@@ -35,7 +35,7 @@
     id:'tools_reload_project',
     iconCls:'icon-reload',
     handler:function(){
-        $tree_menu.tree('reload');
+        $('#tree_menu').tree('reload');
     }
   }],collapsible:false " title="工程列表" style="width: 200px; overflow: hidden;">
     <div class="easyui-panel" style="padding:5px">
@@ -419,7 +419,7 @@
                 },
                 onLoadSuccess: function (node, data) {
                     if ($.isNumeric(project_id)) {
-                        var node = $('#tree_menu').tree('find', project_id);
+                        var node = $(this).tree('find', project_id);
                         $(this).tree('select', node.target);
                     }
                 },
@@ -506,8 +506,7 @@
                 title: '添加计划',
                 params: [
                     {name: 'project.id', value: root.id},
-                    {name: 'inspectScheme.id', value: node.id},
-                    {name: 'dept.id', value: node.dept ? node.dept.id : null}
+                    {name: 'inspectScheme.id', value: node.id}
                 ]
             }, '<c:url value="/project/manage/addPlan?"/>inspectItemId=' + node.inspectItem.id);
         }
@@ -642,8 +641,7 @@
                                 if (!isValid) {
                                     $.messager.progress('close');
                                 }
-//                                return isValid;//TODO 验证有问题
-                                return 1;
+                                return isValid;
                             },
                             success: function (ret) {
                                 $.messager.progress('close');

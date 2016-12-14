@@ -49,9 +49,7 @@
         initUI();
         function initUI() {
             $('#tree_menu').tree({
-//                    url:'tree_data1.json',
                 data: tree_data,
-//                    method:'get',
                 animate: true,
                 onClick: function (node) {
                     if (node.text && node.url) {
