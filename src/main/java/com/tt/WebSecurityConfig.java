@@ -3,6 +3,7 @@ package com.tt;
 import com.tt.ext.security.AuthenticationFilter;
 import com.tt.ext.security.JsonAuthenticationFailureHandler;
 import com.tt.ext.security.JsonAuthenticationSuccessHandler;
+import com.tt.web.filter.KapchaFilter;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -44,6 +46,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Qualifier(value = "myUserDetailsService")
     private UserDetailsService userDetailsService;
 
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/resources/**").antMatchers("/kaptcha");
+    }
+
     /**
      * Session 管理
      * http://docs.spring.io/spring-security/site/docs/4.2.1.BUILD-SNAPSHOT/reference/htmlsingle/#session-mgmt
@@ -56,15 +63,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
+                .addFilterBefore(new KapchaFilter(),UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable()
                 .headers().frameOptions().sameOrigin()
                 .and()
-//                .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                .antMatchers("/resources/**")
-                .permitAll()
-                .and()
-//                .authorizeRequests().anyRequest().permitAll();;//.and()
                 .formLogin()
                 .loginPage("/login")
                 .failureHandler(failureHandler())

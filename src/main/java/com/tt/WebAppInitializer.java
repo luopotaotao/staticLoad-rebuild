@@ -5,8 +5,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.Filter;
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletContext;
 
 /**
  * Created by tt on 2016/11/20.
@@ -32,7 +30,6 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
-
         OpenSessionInViewFilter hibernateFilter = new OpenSessionInViewFilter();
         return new Filter[] {characterEncodingFilter, hibernateFilter};
     }

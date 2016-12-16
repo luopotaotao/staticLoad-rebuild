@@ -18,14 +18,14 @@
             function doLogin() {
                 var name = $("#name").val();
                 var pwd = $("#pwd").val();
-                var verifycode = $("#verifycode").val();
-                if (true) {//validate(name,pwd,verifycode)) {
+                var kaptcha = $("#kaptcha").val();
+                if (true) {//validate(name,pwd,kaptcha)) {
                     pwd = $("#pwd").val();
                     $.ajax({
                         url: "<c:url value="/login"/>",
                         dataType: 'json',
                         type: 'post',
-                        data: {username: name, password: pwd, verifycode: verifycode,'${_csrf.parameterName}':'${_csrf.token}'}
+                        data: {username: name, password: pwd, kaptcha: kaptcha,'${_csrf.parameterName}':'${_csrf.token}'}
                     }).success(function (r) {
 
                         try {
@@ -56,7 +56,7 @@
                 }
             }
 
-            function validate(name, pwd, verifycode) {
+            function validate(name, pwd, kaptcha) {
                 $("#btn_login").focus();
 
                 if (!name) {
@@ -79,13 +79,13 @@
                 } else {
                     $("#pwd").val(sha256_digest(pwd));
                 }
-                if (!verifycode) {
+                if (!kaptcha) {
                     art.dialog({
                         time: 1,
                         icon: 'warning',
                         content: '验证码不能为空！'
                     });
-                    $("#verifycode").focus();
+                    $("#kaptcha").focus();
                     return false;
                 }
                 return true;
@@ -176,7 +176,7 @@
                 </tr>
                 <tr>
                     <td align="right">验证码：</td>
-                    <td><input name="verifycode" id="verifycode" style="width: 80px" maxlength="4" class="txt"
+                    <td><input name="kaptcha" id="kaptcha" style="width: 80px" maxlength="4" class="txt"
                                tabindex="3">
                         <%--<img id="code"--%>
                                                  <%--src="authimg?now=new Date()"--%>
@@ -185,7 +185,7 @@
                                                  <%--height="25"--%>
                                                  <%--align="absMiddle"--%>
                                                  <%--onClick="this.src='authimg?now='+new Date()">--%>
-                        <img src="<c:url value="/resources/style/images/authcode.png"/>" width="65" height="25" align="absMiddle">
+                        <img src="<c:url value="/kaptcha"/>" width="95" height="25" align="absMiddle">
                     </td>
                 </tr>
                 </tbody>

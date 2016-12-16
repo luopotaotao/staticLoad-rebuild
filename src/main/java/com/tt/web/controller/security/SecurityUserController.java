@@ -24,4 +24,5 @@ public class SecurityUserController {
         return "index";
     }
 
+
 }

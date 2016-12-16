@@ -19,56 +19,61 @@ public class ControllerConfig {
     @ExceptionHandler(value = AddFailedException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public Map<String, String> addException(){
+    public Map<String, String> addException() {
         return getMsgMap("添加失败!请重新尝试或联系管理员!");
     }
-    
+
     @ExceptionHandler(value = DeleteException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public Map<String, String> deleteException(){
+    public Map<String, String> deleteException() {
         return getMsgMap("删除失败!请重新尝试或联系管理员!");
     }
-    
+
     @ExceptionHandler(value = UpdateException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public Map<String, String> updateException(){
+    public Map<String, String> updateException() {
         return getMsgMap("更新失败!请重新尝试或联系管理员!");
     }
-    
+
     @ExceptionHandler(value = QueryException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public Map<String, String> queryException(){
+    public Map<String, String> queryException() {
         return getMsgMap("查询失败!请重新尝试或联系管理员!");
     }
-    
+
     @ExceptionHandler(value = NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public Map<String, String> notFoundException(){
+    public Map<String, String> notFoundException() {
         return getMsgMap("没有相关记录!");
     }
-    
+
     @ExceptionHandler(value = AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
-    public Map<String, String> accessDeniedException(){
+    public Map<String, String> accessDeniedException() {
         return getMsgMap("权限不足!");
     }
+
     @ExceptionHandler(value = DeptNullException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String needDeptException(){
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String needDeptException() {
         return "main/error";
+    }
+    @ExceptionHandler(value = Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, String> internalException() {
+        return getMsgMap("内部错误!");
     }
 
 
 
-
-    private Map<String,String> getMsgMap(String msg){
-        Map<String,String> ret = new HashMap<>();
-        ret.put("msg",msg);
+    private Map<String, String> getMsgMap(String msg) {
+        Map<String, String> ret = new HashMap<>();
+        ret.put("msg", msg);
         return ret;
     }
 }
