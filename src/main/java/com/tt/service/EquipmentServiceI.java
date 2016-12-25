@@ -7,6 +7,6 @@ import com.tt.model.Equipment;
  */
 public interface EquipmentServiceI extends BaseService<Equipment>{
     Equipment loadEquipmentByCode(String code);
-//    List<Equipment> list(Integer dept_id, String name);
-//TODO 额外参数
+    Equipment loadByCodeIgnoreDept(String code);
+    boolean isExist(String code);
 }

@@ -2,6 +2,7 @@ package com.tt.web.controller.basic;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.tt.annotation.NeedDept;
 import com.tt.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ public class AreaController extends BaseController<Area> {
     @Autowired
     private AreaServiceI areaService;
 
+    @NeedDept
     @RequestMapping("index")
     public String index(Model model){
         return "module_basic/area";

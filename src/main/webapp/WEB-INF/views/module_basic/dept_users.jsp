@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<div style="width:100%">
+<div id="dialog_content" style="width:100%">
 
     <div class="easyui-panel" style="width:30%">
         <input class="easyui-searchbox"
@@ -10,7 +10,7 @@
     </div>
 
     <table id="dg_user" style="width:100%"></table>
-    <div id="dlg_user_edit" class="easyui-dialog" style="width:100%;max-width:400px;padding:30px 60px;"
+    <div id="dlg_user_edit" class="easyui-dialog destroy" style="width:100%;max-width:400px;padding:30px 60px;"
          data-options="
             title: '编辑',
             closed: true,
@@ -167,6 +167,7 @@
                         return isValid;
                     },
                     success: function (data) {
+                        debugger;
                         $.messager.progress('close');
                         data = $.parseJSON(data);
                         if (data.flag) {

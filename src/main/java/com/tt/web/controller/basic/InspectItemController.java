@@ -1,6 +1,7 @@
 package com.tt.web.controller.basic;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tt.annotation.NeedDept;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ public class InspectItemController extends BaseController<InspectItem> {
     @Autowired
     private InspectItemServiceI inspectItemService;
 
+    @NeedDept
     @RequestMapping("index")
     public String index(Model model) {
         return "module_basic/inspect_item";

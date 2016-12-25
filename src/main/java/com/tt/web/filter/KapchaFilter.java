@@ -1,10 +1,8 @@
 package com.tt.web.filter;
 
 import com.google.code.kaptcha.Constants;
-import com.tt.web.exception.KaptchaErrorException;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,7 +19,7 @@ public class KapchaFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        if (req.getMethod().equals("POST")) {
+        if (req.getMethod().equals("POST")&&req.getRequestURI().indexOf("login")>-1) {
             System.out.println("do filter");
             String kaptcha = request.getParameter("kaptcha");
             if (kaptcha == null || kaptcha.trim().isEmpty() || !kaptcha.equals(req.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY))) {

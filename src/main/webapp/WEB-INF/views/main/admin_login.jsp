@@ -185,7 +185,7 @@
                                                  <%--height="25"--%>
                                                  <%--align="absMiddle"--%>
                                                  <%--onClick="this.src='authimg?now='+new Date()">--%>
-                        <img src="<c:url value="/kaptcha"/>" width="95" height="25" align="absMiddle">
+                        <img src="<c:url value="/kaptcha"/>" width="95" height="25" align="absMiddle" onClick="this.src='<c:url value="/kaptcha"/>?now='+new Date()">
                     </td>
                 </tr>
                 </tbody>

@@ -1,6 +1,7 @@
 package com.tt.dao.impl;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import com.tt.dao.InspectItemDaoI;
 import com.tt.dao.impl.BaseDaoImpl;
@@ -17,7 +18,7 @@ public class InspectItemDaoImpl extends BaseDaoImpl<InspectItem> implements Insp
     public List<InspectItem> list(String name, Integer page, Integer pageSize) {
         Criteria c = super.getCriteria(page,pageSize);
         if(!isEmpty(name)){
-            c.add(like("name",name));
+            c.add(Restrictions.like("name","%"+name+"%"));
         }
         return c.list();
     }

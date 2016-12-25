@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<div style="width:100%">
+<div class="easyui-panel" style="width:100%">
 
     <div class="easyui-panel" style="width:30%">
         <input class="easyui-searchbox"
@@ -10,7 +10,7 @@
     </div>
 
     <table id="dg_equipment" style="width:100%"></table>
-    <div id="dlg_equipment_edit" class="easyui-dialog" style="width:100%;max-width:400px;padding:30px 60px;"
+    <div id="dlg_equipment_edit" class="easyui-dialog destroy" style="width:100%;max-width:400px;padding:30px 60px;"
             data-options="
             title: '添加设备',
             closed: true,
@@ -26,10 +26,10 @@
             iconCls: 'icon-cancel',
             handler: $.closeEquipmentEditDialog
             }]
-        ">
+    ">
         <form id="ff_equipment" class="easyui-form" method="post" data-options="novalidate:true" action="<c:url value="/basic/equipment/post"/>">
             <div style="margin-bottom:20px;display: none">
-                <input class="easyui-textbox" name="id" style="width:100%" data-options="label:'id:',required:true">
+                <input class="easyui-textbox" name="id" style="width:100%" data-options="label:'id:'">
             </div>
             <div style="margin-bottom:20px">
                 <input class="easyui-textbox" name="code" style="width:100%"
@@ -37,11 +37,11 @@
             </div>
             <div style="margin-bottom:20px">
                 <input class="easyui-textbox" name="name" style="width:100%"
-                       data-options="label:'设备名称:'">
+                       data-options="label:'设备名称:',required:true">
             </div>
             <div style="margin-bottom:20px">
                 <input class="easyui-datebox" name="expiredDate" style="width:100%"
-                       data-options="label:'有效日期:',editable:false">
+                       data-options="label:'有效日期:',editable:false,required:true">
             </div>
             <div style="margin-bottom:20px">
                 <input class="easyui-textbox" name="note" style="width:100%"
@@ -51,12 +51,10 @@
     </div>
     <script type="text/javascript">
         $(function () {
+            var dept_id = $('#details').data("data").id;
             $('#dg_equipment').datagrid({
-                url: '<c:url value="/basic/equipment/query"/>',
+                url: '<c:url value="/basic/equipment/query/"/>' + dept_id,
                 method: 'get',
-//                title: '设备管理',
-//                iconCls: 'icon-save',
-//            width: 700,
                 height: $('body').height(),
                 fitColumns: true,
                 singleSelect: false,
@@ -155,23 +153,6 @@
                 }
             }
 
-//            $('#dlg_equipment_edit').dialog({
-//                title: "添加人员",
-//                closed: true,
-//                modal: true,
-//                draggable: false,
-//                iconCls: 'icon-add',
-//                buttons: [{
-//                    text: '保存',
-//                    iconCls: 'icon-ok',
-//                    handler: submitForm
-//                }, {
-//                    text: '取消',
-//                    iconCls: 'icon-cancel',
-//                    handler: closeEditDialog
-//                }]
-//            })
-
             function showEditDialog(data) {
                 var $ff = $('#ff_equipment');
                 if (data) {
@@ -181,7 +162,6 @@
                 } else {
                     $ff.form({url: '<c:url value="/basic/equipment/post"/>'});
                 }
-//                $('#equipment_dept_id').textbox('setValue', dept_id);
                 $('#dlg_equipment_edit').dialog('open');
             }
 
@@ -189,25 +169,24 @@
             function submitForm() {
                 $.messager.progress();	// display the progress bar
                 $('#ff_equipment').form('submit', {
-                    onSubmit: function () {
-                        var isValid = $(this).form('validate');
+                    onSubmit: function (param) {
+                        var isValid = $(this).form('enableValidation').form('validate');
                         if (!isValid) {
                             $.messager.progress('close');	// hide progress bar while the form is invalid
+                        }
+                        if(dept_id){
+                            param.dept_id =  $('#details').data("data").id;
                         }
                         return isValid;	// return false will stop the form submission
                     },
                     success: function (data) {
                         $.messager.progress('close');	// hide progress bar while submit successfully
-//                    {
-//                        "success": true,
-//                            "message": "Message sent successfully."
-//                    }
                         data = $.parseJSON(data);
                         if (data.flag) {
                             $.messager.alert('提示', '保存成功!');
                             closeEditDialog(true);
                         } else {
-                            $.messager.alert('提示', data.message || '保存失败,请检查网络连接或者权限!');
+                            $.messager.alert('提示', data.msg || '保存失败,请检查网络连接或者权限!');
                         }
                     }
                 });

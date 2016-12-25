@@ -1,6 +1,7 @@
 package com.tt.web.controller.project;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tt.annotation.NeedDept;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ public class ManageController extends BaseController<Project> {
     @Autowired
     private ProjectServiceI projectService;
 
+    @NeedDept
     @RequestMapping("index")
     public String index(@RequestParam(name = "project_id", required = false) String project_id, Model model) {
         model.addAttribute("project_id", project_id != null ? project_id : "null");

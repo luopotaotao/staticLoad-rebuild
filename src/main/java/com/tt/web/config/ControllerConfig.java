@@ -51,6 +51,13 @@ public class ControllerConfig {
         return getMsgMap("没有相关记录!");
     }
 
+    @ExceptionHandler(value = ExistException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public Map<String, String> notFoundException(Exception e) {
+        return getMsgMap(e.getMessage());
+    }
+
     @ExceptionHandler(value = AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
@@ -63,12 +70,12 @@ public class ControllerConfig {
     public String needDeptException() {
         return "main/error";
     }
+
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, String> internalException() {
         return getMsgMap("内部错误!");
     }
-
 
 
     private Map<String, String> getMsgMap(String msg) {

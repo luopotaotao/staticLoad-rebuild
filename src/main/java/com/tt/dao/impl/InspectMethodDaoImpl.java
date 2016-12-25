@@ -18,7 +18,7 @@ public class InspectMethodDaoImpl extends BaseDaoImpl<InspectMethod> implements 
     public List<InspectMethod> list(Integer inspect_item_id, String name) {
         Criteria c = getCriteria().add(Restrictions.eq("inspect_item_id",inspect_item_id));
         if(!isEmpty(name)){
-            c.add(like("name","%"+name+"%"));
+            c.add(Restrictions.like("name","%"+name+"%"));
         }
         return c.list();
     }

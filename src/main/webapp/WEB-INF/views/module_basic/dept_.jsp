@@ -333,10 +333,13 @@
             });
         }
     });
-    function openDialog(title, href,data) {
-        if(data){
-            $('#details').data("data",data);
+    function openDialog(title, href, data) {
+        //由于dialog通过url方式多次加载,会生成重复的dom节点,导致form表单重复提交,需要将重复的节点销毁
+        $('.destroy').panel('destroy');
+        if (data) {
+            $('#details').data("data", data);
         }
+
         $('#details').dialog({
             title: title,
             width: $('body').width() * 0.8,
@@ -351,11 +354,12 @@
 
     function manageTUsers(id) {
         var href = '<c:url value="/basic/inspector/index"/>';
-        openDialog('账号管理', href,{id:id});
+        openDialog('账号管理', href, {id: id});
     }
     function manageEquipments(id) {
-        var href = '<c:url value="/basic/equipment/index/"/>';
-        openDialog('设备管理', href,{id:id});
+        var href = '<c:url value="/basic/equipment/index"/>';
+        openDialog('设备管理', href, {id: id});
+        $('<div/>').html()
     }
     var r = null;
     function initResumable() {

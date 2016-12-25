@@ -25,8 +25,8 @@ public class EquipmentController extends BaseController<Equipment> {
     @Autowired
     private EquipmentServiceI equipmentService;
 
-    @RequestMapping("index/{dept_id}")
-    public String index(){
+    @RequestMapping("index")
+    public String index() {
         return "module_basic/dept_equipment";
     }
 
@@ -36,38 +36,40 @@ public class EquipmentController extends BaseController<Equipment> {
         return equipmentService.get(id);
     }
 
-    @RequestMapping(value = "query",method = RequestMethod.GET)
+    @RequestMapping(value = "query/{dept_id}", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject list(@RequestParam(required = false) String name) {
+    public JSONObject list(@RequestParam(required = false) String name, @PathVariable(value = "dept_id", required = false) Integer dept_id) {
         name = UrlStringDecoder.decode(name);
-        Map<String,Object> params = createHashMap();
-        if (name!=null) {
-            params.put("name",name);
+        Map<String, Object> params = createHashMap();
+        if (name != null) {
+            params.put("name", name);
         }
-        List<Equipment> list = equipmentService.list(params,null,null);
+        if (dept_id != null) {
+            params.put("dept_id", dept_id);
+        }
+        List<Equipment> list = equipmentService.list(params);
         return listResponse(list);
     }
 
-    //    @RequestMapping(value = "post", method = RequestMethod.POST)
-    @RequestMapping(value = "post")
+    @RequestMapping(value = "post", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject add(@ModelAttribute Equipment equipment, BindingResult result) {
         equipmentService.add(equipment);
-        return flagResponse(equipment.getId()>0);
+        return flagResponse(equipment.getId() > 0);
     }
 
     @RequestMapping(value = "put", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject update(@ModelAttribute Equipment equipment) {
         equipmentService.update(equipment);
-        return flagResponse(equipment.getId()>0);
+        return flagResponse(equipment.getId() > 0);
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject delete(@RequestParam(value = "ids[]") int[] ids) {
         List<Integer> list = new LinkedList<>();
-        Arrays.stream(ids).forEach(id->list.add(id));
+        Arrays.stream(ids).forEach(id -> list.add(id));
         int ret = equipmentService.del(list);
         return flagResponse(ret);
     }

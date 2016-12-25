@@ -5,6 +5,7 @@ import com.tt.dao.BaseDaoI;
 import com.tt.model.BaseModel;
 import com.tt.model.Dept;
 import com.tt.util.SessionUtil;
+import com.tt.web.exception.DeptNullException;
 import org.hibernate.*;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -34,7 +35,10 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
 
     private Integer getDeptId() {
         Dept dept = SessionUtil.getUser().getDept();
-        return dept==null?null:dept.getId();
+        if(dept==null||dept.getId()==null){
+            throw new DeptNullException("未设置公司!");
+        }
+        return dept.getId();
     }
 
     /**
@@ -71,7 +75,7 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
                 if (val instanceof String) {
                     String str = (String) val;
                     if (str.startsWith("%") || str.endsWith("%")) {
-                        c.add(like(key, str));
+                        c.add(Restrictions.like(key, str));
                     } else {
                         c.add(Restrictions.eq(key, str));
                     }
@@ -110,11 +114,16 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
             if (entityClass.getSuperclass() == BaseModel.class) {
                 BaseModel target = (BaseModel)o;
                 //若页面没有设置dept_id 或者 不具有超级管理员权限,则设置为当前登录用户所属组
-                if(target.getDept_id()==null||!SessionUtil.hasRole("ROLE_SUPER")){
+//                if(target.getDept_id()==null||!SessionUtil.hasRole("ROLE_SUPER")){
+                if(target.getDept_id()==null){
                     ((BaseModel)o).setDept_id(getDeptId());
                 }
             }
-            return this.getCurrentSession().save(o);
+            try {
+                return this.getCurrentSession().save(o);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -356,9 +365,9 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
         return val == null || val.trim().isEmpty();
     }
 
-    protected SimpleExpression like(String field, String val) {
-        StringBuilder val_like = new StringBuilder("%");
-        val_like.append(val.trim()).append("%");
-        return Restrictions.like(field, val_like.toString());
-    }
+//    protected SimpleExpression like(String field, String val) {
+//        StringBuilder val_like = new StringBuilder("%");
+//        val_like.append(val.trim()).append("%");
+//        return Restrictions.like(field, val_like.toString());
+//    }
 }
