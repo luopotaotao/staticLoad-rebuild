@@ -121,7 +121,7 @@
                     {field: 'id', title: 'ID', hidden: true},
                     {field: 'username', title: '账号'},
                     {field: 'realName', title: '姓名'},
-//                    {field: 'password', title: '密码'},
+                    {field: 'email', title: '邮箱'},
                     {
                         field: 'authority', title: '角色', formatter: function (val, row) {
                         return {

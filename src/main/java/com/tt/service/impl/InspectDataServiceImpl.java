@@ -1,5 +1,7 @@
 package com.tt.service.impl;
 
+import com.tt.dao.InspectPlanDaoI;
+import com.tt.model.InspectPlan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.tt.dao.InspectDataDaoI;
@@ -21,6 +23,8 @@ public class InspectDataServiceImpl implements InspectDataServiceI {
     @Autowired
     private InspectDataDaoI inspectDataDao;
 
+    @Autowired
+    private InspectPlanDaoI planDao;
     @Override
     public List<InspectData> list(String PRG,String STZH,boolean loadFlag) {
         String hql = "from InspectData WHERE PRG=:PRG and STZH=:STZH and loadFlag=:loadFlag order by SETprs ASC,totalTime ASC";
@@ -87,10 +91,10 @@ public class InspectDataServiceImpl implements InspectDataServiceI {
         return inspectDataDao.findList("select distinct new map(d.prg as prg,d.stzh as stzh) from InspectData d where d.dept_id=:dept_id",params);
     }
     @Override
-    public List<Map<String, Object>> loadUnLinkedKeys(Integer dept_id) {
+    public List<Map<String, Object>> loadUnLinkedKeys() {
         Map<String, Object> params = new HashMap<>();
 
-        return inspectDataDao.findList("select distinct new map(d.prg as prg,d.stzh as stzh) from InspectData d where d.plan_id is null and d.dept_id=:dept_id",params);
+        return inspectDataDao.findList("select distinct new map(d.prg as prg,d.stzh as stzh,d.devnb as devnb) from InspectData d where d.plan_id is null and d.dept_id=:dept_id",params);
     }
     public List<Map<String, Object>> loadLinkedKeys(Integer plan_id) {
         Map<String,Object> params = new HashMap<>();
@@ -100,13 +104,13 @@ public class InspectDataServiceImpl implements InspectDataServiceI {
     }
 
     @Override
-    public int linkData(Integer plan_id, List<Map<String, Object>> data) {
-        String sql = "update b_inspect_data set plan_id=:plan_id where prg=:prg and stzh=:stzh and d.dept_id=:dept_id";
-        int ret = 0;
-        for(Map item:data){
-            item.put("plan_id",plan_id);
-            ret+=inspectDataDao.executeSql(sql,item);
-        }
+    public int linkData(Integer plan_id,Map<String, Object> data) {
+        InspectPlan plan = planDao.getById(plan_id);
+        String sql = "update b_inspect_data set plan_id=:plan_id,prg=:new_prg,stzh=:new_stzh where prg=:prg and stzh=:stzh and devnb=:devnb and dept_id=:dept_id";
+        data.put("plan_id",plan_id);
+        data.put("new_prg",plan.getProject().getCode());
+        data.put("new_stzh",plan.getStzh());
+        int ret = inspectDataDao.executeSql(sql,data);
         return ret;
     }
 

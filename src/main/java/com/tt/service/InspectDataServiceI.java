@@ -15,9 +15,9 @@ public interface InspectDataServiceI {
     Map<String, Object> calcChart2(List<InspectData> list);
     int del(List<Integer> ids);
     List<Map<String,Object>> loadKeys(Integer dept_id);
-    List<Map<String, Object>> loadUnLinkedKeys(Integer dept_id);
+    List<Map<String, Object>> loadUnLinkedKeys();
     List<Map<String, Object>> loadLinkedKeys(Integer plan_id);
-    int linkData(Integer plan_id, List<Map<String, Object>> data);
+    int linkData(Integer plan_id, Map<String, Object> data);
     InspectData loadLatestData(String PRG, String STZH);
     Map<Integer, Double> getMaxLoad(List<Integer> plan_ids);
     Map<Integer, Double> getMaxOffset(List<Integer> plan_ids);

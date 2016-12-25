@@ -4,6 +4,15 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 
 <script type="text/javascript" charset="utf-8">
+    $.extend($.fn.validatebox.defaults.rules, {
+        /*必须和某个字段相等*/
+        equalTo: {
+            validator: function (value, param) {
+                return $(param[0]).val() == value;
+            },
+            message: '两次输入不一致!'
+        }
+    });
     $(function () {
 
         openModule(
@@ -46,24 +55,6 @@
             $.messager.alert('提示', '获取数据失败,请重新尝试或联系管理员!');
         });
     }
-    function editCurrentUserPwd() {
-        parent.$
-                .modalDialog({
-                    title: '修改密码',
-                    width: 330,
-                    height: 280,
-                    href: '<c:url value="/userController/editCurrentUserPwdPage"/>',
-                    buttons: [{
-                        text: '修改',
-                        handler: function () {
-                            var f = parent.$.modalDialog.handler
-                                    .find('#editCurrentUserPwdForm');
-                            f.submit();
-                        }
-                    }]
-                });
-    }
-
 
     function openModule(url) {
         var $iframe = $('#panel_main');
@@ -195,7 +186,8 @@
             <div style="margin-top: 10px">
                 <sec:authorize access="hasRole('SUPER')">
                     <sec:authentication property="principal.dept" var="dept"/>
-                    <a id="current_dept_name" href="javascript:openModule('<c:url value="/basic/index/index?selectDept=true"/>')">
+                    <a id="current_dept_name"
+                       href="javascript:openModule('<c:url value="/basic/index/index?selectDept=true"/>')">
                         <c:if test="${not empty dept}">
                             ${dept.name}
                         </c:if>
@@ -226,21 +218,36 @@
             draggable: false,
             //iconCls: 'icon-add',
             buttons: [{
+            text: '修改密码',
+            handler: function(){
+                if($('#ff_user_info').form('enableValidation').form('validate')){
+                    $.ajax({
+                        url:'<c:url value="/basic/user/changePwd"/>',
+                        type:'post',
+                        dataType:'json',
+                        data:{
+                            old:$('#user_pwd_old').textbox('getValue'),
+                            cur:$('#user_pwd_new').textbox('getValue')
+                        }
+                    })
+                    .success(function(ret){
+                        if(ret.flag){
+                            $.messager.alert('系统提示','修改密码成功!重新登录生效!');
+                            return;
+                        }
+                        $.messager.alert('系统提示',ret.msg||'修改密码失败!');
+                    })
+                    .fail(function(){
+                        $.messager.alert('系统提示',ret.msg||'修改密码失败!');
+                    });
+                }
+
+            }
+            },{
             text: '确定',
             handler: function(){
-                $('#ff_user_info').form('enableValidation').form('submit', {
-                    url: '<c:url value="/basic/user/changePwd"/>',
-                    onSubmit: function(){
-                        var isValid = $(this).form('validate');
-                        if (!isValid){
-                            $.messager.alert('系统提示','请修正表单中的错误!');
-                        }
-                        return isValid;	// 返回false终止表单提交
-                    },
-                    success: function(ret){
-                        $.messager.alert('系统提示',JSON.stringify(ret));
-                    }
-                });
+                $('#ff_user_info').form('clear');
+                $('#dlg_user_info').dialog('close');
 
             }
             }]
@@ -249,6 +256,10 @@
           action="<c:url value="/basic/user/put"/>"/>
     <div style="margin-bottom:20px">
         <input class="easyui-textbox" name="username" style="width:100%"
+               data-options="label:'账号:',editable:false">
+    </div>
+    <div style="margin-bottom:20px">
+        <input class="easyui-textbox" name="realName" style="width:100%"
                data-options="label:'账号:',editable:false">
     </div>
     <div style="margin-bottom:20px">
@@ -267,7 +278,7 @@
     <div style="margin-bottom:20px">
         <input id="user_pwd_repeat" class="easyui-textbox" name="role" style="width:100%"
                data-options="label:'确认密码:',required:true" type="password"
-               validType="equalTo['#new_password']" invalidMessage="两次输入密码不匹配">
+               validType="equalTo['#user_pwd_new']" invalidMessage="两次输入密码不匹配">
     </div>
     </form>
 </div>

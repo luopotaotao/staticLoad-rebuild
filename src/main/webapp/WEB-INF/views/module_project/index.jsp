@@ -529,17 +529,27 @@
             var plan_id = node.id;
             var url = '<c:url value="/inspect/plan/selectData/"/>' + plan_id;
             selectChild(url, function (data) {
-                $.ajax({
-                    url: '<c:url value="/inspect/data/linkData/"/>' + plan_id,
-                    type: 'post',
-                    dataType: 'json',
-                    data: JSON.stringify(data),
-                    contentType: "application/json"
-                }).done(function (ret) {
-                    $('#project_scheme_plan_show_data_div').panel('refresh', '<c:url value="/inspect/plan/showData/"/>' + plan_id);
-                }).fail(function () {
-                    $.messager.alert('提示', '关联数据失败!');
-                });
+                $.messager.confirm('请确认','是否要将该组数据关联到此计划中?此操作不可撤销!',function(r){
+                    if(r){
+                        $.ajax({
+                            url: '<c:url value="/inspect/data/linkData/"/>' + plan_id,
+                            type: 'post',
+                            dataType: 'json',
+                            contentType:"application/json",
+                            data:JSON.stringify(data[0]),
+                        }).done(function (ret) {
+                            if(ret.flag){
+                                $.messager.alert('系统提示', '关联数据成功!');
+                                $('#project_scheme_plan_show_data_div').panel('refresh', '<c:url value="/inspect/plan/showData/"/>' + node.prg + '/' + node.id);
+                                return;
+                            }
+                            $.messager.alert('系统提示', '关联数据失败!');
+                        }).fail(function () {
+                            $.messager.alert('系统提示', '关联数据失败!');
+                        });
+                    }
+                })
+
             });
         }
 

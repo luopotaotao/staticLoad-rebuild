@@ -108,7 +108,7 @@ public class UserController extends BaseController<MyUserDetails> {
 
     @RequestMapping(value = "changePwd",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject changePwd(String old,String cur){
+    public JSONObject changePwd(@RequestParam(value = "old") String old,@RequestParam(value = "cur")String cur){
         boolean flag = userService.changePwd(SessionUtil.getUser().getId(),old,cur);
         return flagResponse(flag);
     }

@@ -150,11 +150,11 @@ public class DataController extends BaseController<InspectData> {
 //        return inspectDataService.loadKeys(getDeptId());
 //    }
 //
-//    @RequestMapping(value = "unLinkedKeys", method = RequestMethod.GET)
-//    @ResponseBody
-//    public JSONObject listUnlinkedKeys() {
-//        return listResponse(inspectDataService.loadUnLinkedKeys(getDeptId()));
-//    }
+    @RequestMapping(value = "unLinkedKeys", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject listUnlinkedKeys() {
+        return listResponse(inspectDataService.loadUnLinkedKeys());
+    }
 
     @RequestMapping(value = "linkedKeys/{plan_id}", method = RequestMethod.GET)
     @ResponseBody
@@ -164,7 +164,7 @@ public class DataController extends BaseController<InspectData> {
 
     @RequestMapping(value = "linkData/{plan_id}", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject linkData(@PathVariable(value = "plan_id") Integer plan_id, @RequestBody List<Map<String, Object>> data) {
+    public JSONObject linkData(@PathVariable(value = "plan_id") Integer plan_id, @RequestBody Map<String, Object> data) {
         int count = inspectDataService.linkData(plan_id, data);
         return flagResponse(count > 0);
     }
